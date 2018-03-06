@@ -13,8 +13,13 @@ public class Food {
     private int moodLevel;
     private int hungerValue;
     private int thirstValue;
+    private int energyValue;
 
-    public Food(String description, int fatValue, int nutrientsValue, int healthynessValue, boolean vegetarian, int moodLevel, int hungerValue, int thirstValue) {
+    public Food(String description, int fatValue,
+                int nutrientsValue, int healthynessValue,
+                boolean vegetarian, int moodLevel,
+                int hungerValue, int thirstValue,
+                int energyValue) {
         this.description = description;
         this.fatValue = fatValue;
         this.nutrientsValue = nutrientsValue;
@@ -23,6 +28,7 @@ public class Food {
         this.moodLevel = moodLevel;
         this.hungerValue = hungerValue;
         this.thirstValue = thirstValue;
+        this.energyValue = energyValue;
 
     }
 
@@ -58,6 +64,10 @@ public class Food {
         return thirstValue;
     }
 
+    public int getEnergyValue() {
+        return energyValue;
+    }
+
 
     public String foodToString() {
         return getDescription()
@@ -68,6 +78,7 @@ public class Food {
                 + "," + getMoodLevel()
                 + "," + getHungerValue()
                 + "," + getThirstValue()
+                + "," + getEnergyValue()
                 + "\n";
     }
 

@@ -7,12 +7,13 @@ public class Sport {
     private double enduranceLevelSport;
     private int hungerValueSport;
     private int thirstValueSport;
+    private int energyValueSport;
 
 
     public Sport(String descriptionSport, int fatValueSport,
                  int healthynessValueSport, int moodLevelSport,
                  double strenghtValueSport, double enduranceLevelSport,
-                 int hungerValueSport, int thirstValueSport) {
+                 int hungerValueSport, int thirstValueSport, int energyValueSport) {
 
         this.descriptionSport = descriptionSport;
         this.fatValueSport = fatValueSport;
@@ -22,33 +23,46 @@ public class Sport {
         this.enduranceLevelSport = enduranceLevelSport;
         this.hungerValueSport = hungerValueSport;
         this.thirstValueSport = thirstValueSport;
+        this.energyValueSport = energyValueSport;
 
     }
 
-    public String getDescriptionSport(){
+    public String getDescriptionSport() {
         return descriptionSport;
     }
-    public int getFatValueSport(){
+
+    public int getFatValueSport() {
         return fatValueSport;
     }
-    public int getHealthynessValueSport(){
+
+    public int getHealthynessValueSport() {
         return healthynessValueSport;
     }
-    public int getMoodLevelSport(){
+
+    public int getMoodLevelSport() {
         return moodLevelSport;
     }
-    public double getStrenghtValueSport(){
+
+    public double getStrenghtValueSport() {
         return strenghtValueSport;
     }
-    public double getEnduranceLevelSport(){
+
+    public double getEnduranceLevelSport() {
         return enduranceLevelSport;
     }
-    public int getHungerValueSport(){
+
+    public int getHungerValueSport() {
         return hungerValueSport;
     }
-    public int getThirstValueSport(){
+
+    public int getThirstValueSport() {
         return thirstValueSport;
     }
+
+    public int getEnergyValueSport() {
+        return energyValueSport;
+    }
+
     public String sportToString() {
         return getDescriptionSport()
                 + "," + getFatValueSport()
@@ -58,6 +72,7 @@ public class Sport {
                 + "," + getEnduranceLevelSport()
                 + "," + getHungerValueSport()
                 + "," + getThirstValueSport()
+                + "," + getEnergyValueSport()
                 + "\n";
     }
 

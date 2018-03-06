@@ -6,11 +6,12 @@ import static javafx.application.Application.launch;
 public class Main extends Application {
     public static void main(String[] args) {
         Speicher speicher = new Speicher();
-        Food gebratenerSpeck = new Food("Speck", 8, 3, 0, false, 8, 8, -5);
+        Food eier = new Food("Eier", 1, 4, 1, false, 2, 2, -1,-1);
 
-        speicher.saveEssen(gebratenerSpeck);
+        speicher.saveEssen(eier);
 
         launch(args);
+        System.out.println(Math.random());
     }
 
     @Override

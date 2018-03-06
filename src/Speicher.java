@@ -6,21 +6,36 @@ public class Speicher {
 
     String pfadFoods = "G:/6_Datein/Unterlagen2018/Programmieren/TamagotchiEssen.csv";
     String pfadSports = "G:/6_Datein/Unterlagen2018/Programmieren/TamagotchiSports.csv";
+    String pfadGames = "G:/6_Datein/Unterlagen2018/Programmieren/TamagotchiGames.csv";
 
     File inputFile = new File("G:/6_Datein/Unterlagen2018/Programmieren/TamagotchiEssen.csv");
 
     Map<String, Food> foodMap = new HashMap<>();
     Map<String, Sport> sportMap = new HashMap<>();
+    Map<String, Game> gameMap = new HashMap<>();
 
 
     public Speicher() {
         //Essen das verfügbar ist
-        Food speck = new Food("Speck", 8, 3, 0, false, 8, 8, -5);
+        Food speck = new Food("Speck", 8, 3, 0, false, 8, 8, -5,-1);
         foodMap.put("Speck", speck);
 
         //Sportarten die ausführbar sind
-        Sport joggen = new Sport("Joggen", -4, 4, 2, 0.25, 0.5, -1, -2);
+        Sport joggen = new Sport("Joggen", -4, 4, 2, 0.5, 1, -2, -4,-3);
         sportMap.put("Joggen", joggen);
+
+        //Games die spielbar sind
+
+        Game fangen = new Game("Fangen", -2, 2, 4, 0.25, 0.5, -1, -2,-2);
+        gameMap.put("Fangen", fangen);
+    }
+
+    public Sport getGame(String gameString) {
+        return sportMap.get(gameString);
+    }
+
+    public Map<String, Game> getAllGame() {
+        return gameMap;
     }
 
     public Sport getSport(String sportString) {
@@ -51,7 +66,7 @@ public class Speicher {
     }
 
     private void datenSpeicherohneRedundanz(String lineToWrite, String pfadVariabel) {
-        if (!istZeileVorhanden(lineToWrite,pfadVariabel)) {
+        if (!istZeileVorhanden(lineToWrite, pfadVariabel)) {
             writeLine(lineToWrite, pfadVariabel);
         }
     }
@@ -83,6 +98,9 @@ public class Speicher {
 
     public void saveSport(Sport sport) {
         datenSpeicherohneRedundanz(sport.sportToString(), pfadSports);
+    }
+    public void saveGame(Game game) {
+        datenSpeicherohneRedundanz(game.gameToString(), pfadGames);
     }
 
 }
