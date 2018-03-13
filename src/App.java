@@ -1,6 +1,7 @@
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.*;
@@ -75,67 +76,209 @@ public class App {
 
     // Der mainScreen zeigt das Tamagotchi mit den zu der Verfassung gehörigen Animation
     public void mainScreen() {
-        //Gridpane im Zentrum
-        GridPane grid = UiUtils.creatingGrid(11, 7);
-        grid.setGridLinesVisible(true);
+
+        //Hbox Oben Main
+        HBox hBoxObenMain = creatingHBox();
+        GridPane grid = new GridPane();
+        ColumnConstraints col = new ColumnConstraints();
+        col.setPercentWidth(20.0);
+        Button buttonEssen = new Button("Essen");
+
+        buttonEssen.setOnAction(e -> {
+            foodScreen();
+            buttonEssen.setStyle(farbe.farbe());
+        });
+        Button buttonSpielen = new Button("Spielen");
+        buttonSpielen.setOnAction(e -> gameScreen());
+        Button buttonSport = new Button("Sport");
+        buttonSport.setOnAction(e -> sportScreen());
+        Button buttonSchlafen = new Button("Schlafen");
+        buttonSchlafen.setOnAction(e -> sleepingScreen());
+
+        grid.getColumnConstraints().add(col);
+        grid.getChildren().addAll(buttonEssen, buttonSpielen, buttonSport, buttonSchlafen);
+        hBoxObenMain.getChildren().add(grid);
+        //Hbox Unten Main
 
 
-        //HBox oben
-        HBox hBoxOben = creatingHBox();
-        GridPane gridHbox = new GridPane();
+/*
 
-        for (int i = 0; i < 4; i++) {
-            ColumnConstraints col = new ColumnConstraints();
-            col.setPercentWidth(25);
-            col.setPrefWidth(400);
-            gridHbox.getColumnConstraints().add(col);
+        // TabPaneOben
+        TabPane tabPaneMainOben = new TabPane();
+        tabPaneMainOben.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        tabPaneMainOben.setSide(Side.TOP);
+        tabPaneMainOben.setTabMaxHeight(40.0);
+        tabPaneMainOben.setTabMaxWidth(480);
+        tabPaneMainOben.setTabMinHeight(40.0);
+        tabPaneMainOben.setTabMinWidth(400);
+
+        Tab tabEssen = new Tab();
+        tabEssen.setText("Essen");
+        Tab tabSpielen = new Tab();
+        tabSpielen.setText("Spielen");
+        Tab tabSport = new Tab();
+        tabSport.setText("Sport");
+        Tab tabSchlafen = new Tab();
+        tabSchlafen.setText("Schlafen");
+
+        tabPaneMainOben.getTabs().addAll(tabEssen, tabSpielen, tabSport, tabSchlafen);
+*/
+
+        //Tab Essen
+
+
+        /*//Tab Spielen
+        int maxNumberColumn = 11;
+        int maxNumberRows = 7;
+        Formbuilder formbuilder = new Formbuilder(maxNumberColumn, maxNumberRows);
+        formbuilder = formbuilder
+                .addHeader("Game")
+                .addEmptyRow();
+
+        for (Game game : speicher.getAllGame().values()) {
+            formbuilder.addButton(e -> tamagotchi.hatNochEnergieFuer(game), game.getDescriptionGame());
+        }
+        GridPane gamePane = formbuilder.build();
+        Background b = new Background(new BackgroundFill(Color.GREEN, null, null));
+        gamePane.setBackground(b);
+
+        tabSpielen.setContent(gamePane);
+
+        //Tab Sport
+        int maxNumberColumnSport = 11;
+        int maxNumberRowsSport = 7;
+        Formbuilder formbuilderSport = new Formbuilder(maxNumberColumnSport, maxNumberRowsSport);
+        formbuilderSport = formbuilderSport
+                .addHeader("Sport")
+                .addEmptyRow();
+
+        for (Sport sportS : speicher.getAllSport().values()) {
+            formbuilderSport.addButton(e -> tamagotchi.hatNochEnergieFuer(sportS), sportS.getDescriptionSport());
+        }
+        GridPane sportsPane = formbuilderSport.build();
+        tabSport.setContent(sportsPane);
+
+
+// TabPaneUnten
+        TabPane tabPaneMainBott = new TabPane();
+        SingleSelectionModel<Tab> selectionModel = tabPaneMainBott.getSelectionModel();
+        tabPaneMainBott.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        selectionModel.clearSelection();
+        tabPaneMainBott.setSide(Side.BOTTOM);
+        tabPaneMainBott.setTabMaxHeight(40.0);
+        tabPaneMainBott.setTabMaxWidth(480);
+        tabPaneMainBott.setTabMinHeight(40.0);
+        tabPaneMainBott.setTabMinWidth(380);
+
+        Tab tabPflege = new Tab();
+        tabPflege.setText("Pflege");
+        Tab tabStatus = new Tab();
+        tabStatus.setText("Status");
+        Tab tabEinstellungen = new Tab();
+        tabEinstellungen.setText("Einstellungen");
+
+
+        tabPaneMainBott.getTabs().addAll(tabPflege, tabStatus, tabEinstellungen);
+
+        //Tab Pflege
+        int maxNumberColumnPflege = 11;
+        int maxNumberRowsPflege = 7;
+        Formbuilder formbuilderPflege = new Formbuilder(maxNumberColumnPflege, maxNumberRowsPflege);
+        formbuilderPflege = formbuilderPflege
+                .addHeader("Pflege")
+                .addEmptyRow();
+
+        for (Pflege pflege : speicher.getAllPflege().values()) {
+            formbuilder.addButton(e -> *//*if (speicher.getPflege("Duschen").equals(pflege)) {
+         *//* tamagotchi.pflegen(pflege)*//*;
+            } else {tamagotchi.pflegen(pflege);}*//*
+
+
+                    , pflege.getDescription());
         }
 
-        gridHbox.setHgap(10);
-        gridHbox.setVgap(10);
-        gridHbox.setPadding(new Insets(0, 10, 0, 10));
+        GridPane pflegePane = formbuilderPflege.build();
 
-        gridHbox.setGridLinesVisible(true);
-
-        Button essen = creatingButton("Essen");
-        essen.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(essen, 0, 0, 1, 1);
-        //Aktion essen auf dem Button Essen
-        essen.setOnAction(e -> foodScreen());
+        tabPflege.setContent(pflegePane);
 
 
-        Button spielen = creatingButton("Spielen");
-        spielen.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(spielen, 1, 0, 1, 1);
-        spielen.setOnAction(event -> gameScreen());
+        //Tab Status
+        Formbuilder formbuilderStatus = new Formbuilder(maxNumberColumn, maxNumberRows);
 
-        Button sport = creatingButton("Sport");
-        sport.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(sport, 2, 0);
-        sport.setOnAction(ev -> sportScreen());
+        formbuilderStatus.addHeader("Status")
+                .addEmptyRow()
+                .addEmptyRow()
+                .addTextInputField("Laune", String.valueOf(tamagotchi.getMood()), (tamagotchi.getMood() / 100))
+                .addTextInputField("Hunger", String.valueOf(tamagotchi.getHunger()), (tamagotchi.getHunger() / 100))
+                .addTextInputField("Durst", String.valueOf(tamagotchi.getThirst()), (tamagotchi.getThirst() / 100))
+                .addTextInputField("Energie", String.valueOf(tamagotchi.getEnergie()), (tamagotchi.getEnergie() / 100))
+                .addTextInputField("Gesundheit", String.valueOf(tamagotchi.getHealthynesse()), (tamagotchi.getHealthynesse() / 100))
+                .addTextInputField("Särke", String.valueOf(tamagotchi.getStrength()), (tamagotchi.getStrength() / 100))
+                .addTextInputField("Ausdauer", String.valueOf(tamagotchi.getEndurance()), (tamagotchi.getEndurance() / 100));
 
-        Button schlafen = creatingButton("Schlafen");
-        schlafen.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(schlafen, 3, 0);
+        GridPane statusPane = formbuilderStatus.build();
+        tabStatus.setContent(statusPane);
 
-
-        hBoxOben.getChildren().addAll(gridHbox);
-
-
-        //HBox unten
-        HBox hBoxUnten = creatingHBox();
-        //hBoxUnten.setAlignment(Pos.CENTER_RIGHT);
-        Button einstellungen = creatingButton("Einstellungen");
-        Button status = creatingButton("Status");
-        status.setOnAction(event -> statusScreen());
-
-        hBoxUnten.getChildren().addAll(status, einstellungen);
+        //Tab Einstellungen
 
 
-        this.mainLayout.setTop(hBoxOben);
-        this.mainLayout.setBottom(hBoxUnten);
-        this.mainLayout.setCenter(grid);
+        vbox.getChildren().addAll(tabPaneMainOben, tabPaneMainBott);*/
+
+        this.mainLayout.setTop(hBoxObenMain);
+
     }
+
+    public void pflegeScreen() {
+        // TabPaneUnten
+        TabPane tabPanePflege = new TabPane();
+        tabPanePflege.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        tabPanePflege.setSide(Side.BOTTOM);
+        tabPanePflege.setTabMaxHeight(40.0);
+        tabPanePflege.setTabMaxWidth(480);
+        tabPanePflege.setTabMinHeight(40.0);
+        tabPanePflege.setTabMinWidth(380);
+
+        Tab tabPflege = new Tab();
+        tabPflege.setText("Pflege");
+        Tab tabStatus = new Tab();
+        tabStatus.setText("Status");
+        Tab tabEinstellungen = new Tab();
+        tabEinstellungen.setText("Einstellungen");
+
+        tabPflege.setContent(new Rectangle(1600, 860, Color.WHITE));
+        tabStatus.setContent(new Rectangle(1600, 860, Color.WHITE));
+        tabEinstellungen.setContent(new Rectangle(1600, 860, Color.WHITE));
+
+
+        //Gridpane Center
+        int maxNumberColumn = 11;
+        int maxNumberRows = 7;
+        Formbuilder formbuilder = new Formbuilder(maxNumberColumn, maxNumberRows);
+        formbuilder = formbuilder
+                .addHeader("Pflege")
+                .addEmptyRow();
+
+        for (Pflege pflege : speicher.getAllPflege().values()) {
+            formbuilder.addButton(e -> /*if (speicher.getPflege("Duschen").equals(pflege)) {
+                     */ tamagotchi.pflegen(pflege)/*;
+            } else {tamagotchi.pflegen(pflege);}*/
+
+
+                    , pflege.getDescription());
+        }
+
+        GridPane pflegePane = formbuilder.build();
+
+        tabPflege.setContent(pflegePane);
+        tabPanePflege.getTabs().
+
+                addAll(tabPflege, tabStatus, tabEinstellungen);
+
+        this.mainLayout.setTop(tabPanePflege);
+        this.mainLayout.setCenter(pflegePane);
+
+    }
+
 
     public void foodScreen() {
 
@@ -240,11 +383,11 @@ public class App {
         Tab tabEssen = new Tab();
         tabEssen.setText("Essen");
         Tab tabSpielen = new Tab();
-        tabEssen.setText("Spielen");
+        tabSpielen.setText("Spielen");
         Tab tabSport = new Tab();
-        tabEssen.setText("Sport");
+        tabSport.setText("Sport");
         Tab tabSchlafen = new Tab();
-        tabEssen.setText("Schlafen");
+        tabSchlafen.setText("Schlafen");
 
         tabEssen.setContent(new Rectangle(1600, 860, Color.WHITE));
         tabSpielen.setContent(new Rectangle(1600, 860, Color.WHITE));
@@ -252,43 +395,6 @@ public class App {
         tabSchlafen.setContent(new Rectangle(1600, 860, Color.WHITE));
         tabPaneSports.getTabs().addAll(tabEssen, tabSpielen, tabSport, tabSchlafen);
 
-        /*//HBOX OBEN
-        HBox hBoxObenSport = creatingHBox();
-        GridPane gridHbox = new GridPane();
-
-
-        for (int i = 0; i < 12; i++) {
-            ColumnConstraints col = new ColumnConstraints();
-            col.setPercentWidth(120 / 12);
-            //col.setPrefWidth(400);
-            gridHbox.getColumnConstraints().add(col);
-        }
-
-
-        gridHbox.setPadding(new Insets(0, 10, 0, 10));
-
-        gridHbox.setGridLinesVisible(true);
-
-        Button essen = creatingButton("Essen");
-        essen.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(essen, 1, 0, 1, 1);
-
-
-        Button spielen = creatingButton("Spielen");
-        spielen.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(spielen, 4, 0, 1, 1);
-
-        Button sport = creatingButton("Sport");
-        sport.setStyle("-fx-background-color: #ffffff");
-
-        sport.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(sport, 7, 0, 1, 1);
-
-        Button schlafen = creatingButton("Schlafen");
-        schlafen.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(schlafen, 10, 0, 1, 1);
-
-        hBoxObenSport.getChildren().addAll(gridHbox);*/
 
         //Gridpane Center
         int maxNumberColumn = 11;
@@ -333,44 +439,6 @@ public class App {
         tabSchlafen.setContent(new Rectangle(1600, 860, Color.WHITE));
 
 
-        /*//HBOX OBEN
-        HBox hBoxObenSport = creatingHBox();
-        GridPane gridHbox = new GridPane();
-
-
-        for (int i = 0; i < 12; i++) {
-            ColumnConstraints col = new ColumnConstraints();
-            col.setPercentWidth(120 / 12);
-            //col.setPrefWidth(400);
-            gridHbox.getColumnConstraints().add(col);
-        }
-
-
-        gridHbox.setPadding(new Insets(0, 10, 0, 10));
-
-        gridHbox.setGridLinesVisible(true);
-
-        Button essen = creatingButton("Essen");
-        essen.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(essen, 1, 0, 1, 1);
-
-
-        Button spielen = creatingButton("Spielen");
-        spielen.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(spielen, 4, 0, 1, 1);
-
-        Button sport = creatingButton("Sport");
-        sport.setStyle("-fx-background-color: #ffffff");
-
-        sport.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(sport, 7, 0, 1, 1);
-
-        Button schlafen = creatingButton("Schlafen");
-        schlafen.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gridHbox.add(schlafen, 10, 0, 1, 1);
-
-        hBoxObenSport.getChildren().addAll(gridHbox);*/
-
         //Gridpane Center
         int maxNumberColumn = 11;
         int maxNumberRows = 7;
@@ -389,5 +457,9 @@ public class App {
 
         this.mainLayout.setTop(tabPaneGame);
         this.mainLayout.setCenter(gamePane);
+    }
+
+    public void sleepingScreen() {
+
     }
 }

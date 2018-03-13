@@ -7,35 +7,61 @@ public class Speicher {
     String pfadFoods = "G:/6_Datein/Unterlagen2018/Programmieren/TamagotchiEssen.csv";
     String pfadSports = "G:/6_Datein/Unterlagen2018/Programmieren/TamagotchiSports.csv";
     String pfadGames = "G:/6_Datein/Unterlagen2018/Programmieren/TamagotchiGames.csv";
+    String pfadPflege = "G:/6_Datein/Unterlagen2018/Programmieren/TamagotchiPflege.csv";
 
     File inputFile = new File("G:/6_Datein/Unterlagen2018/Programmieren/TamagotchiEssen.csv");
 
     Map<String, Food> foodMap = new HashMap<>();
     Map<String, Sport> sportMap = new HashMap<>();
     Map<String, Game> gameMap = new HashMap<>();
+    Map<String, Pflege> pflegeMap = new HashMap<>();
 
 
     public Speicher() {
         //Essen das verfügbar ist
-        Food speck = new Food("Speck", 8, 3, 0, false, 8, 8, -5,-1);
+        Food speck = new Food("Speck", 8, 3, 0, false, 8, 8, -5, -1, -2, 0, 1);
         foodMap.put("Speck", speck);
 
         //Sportarten die ausführbar sind
-        Sport joggen = new Sport("Joggen", -4, 4, 2, 0.5, 1, -2, -4,-3);
+        Sport joggen = new Sport("Joggen", -4, 4, 2, 0.5, 1, -2, -4, -3, 5);
         sportMap.put("Joggen", joggen);
 
         //Games die spielbar sind
 
-        Game fangen = new Game("Fangen", -2, 2, 4, 0.25, 0.5, -1, -2,-2);
+        Game fangen = new Game("Fangen", -2, 2, 4, 0.25, 0.5, -1, -2, -2, -3);
         gameMap.put("Fangen", fangen);
+
+        //Pflegeaktivitäten
+
+        Pflege duschen = new Pflege("Duschen", 0, 30, 1, 2, 0, 0, 1, 0, 0);
+        pflegeMap.put("Duschen", duschen);
+
+        Pflege spritze = new Pflege("Spritze", 10, 0, 20, -10, 0, 0, -10, 0, 0);
+        pflegeMap.put("Spritze", spritze);
+
+        Pflege washHands = new Pflege("Hände waschen", 0, 10, 1, 0, 0, 0, 0, 0, 0);
+        pflegeMap.put("Hände waschen", washHands);
+
+        Pflege aufsKloGehen = new Pflege("Aufs Klo gehen", 0, -20, 0, 1, 0, 0, 0, -100, -100);
+        pflegeMap.put("Aufs Klo gehen", aufsKloGehen);
+
     }
 
     public Sport getGame(String gameString) {
         return sportMap.get(gameString);
     }
 
+
     public Map<String, Game> getAllGame() {
         return gameMap;
+    }
+
+    public Pflege getPflege(String pflegeString) {
+        return pflegeMap.get(pflegeString);
+    }
+
+    public Map<String, Pflege> getAllPflege() {
+        return pflegeMap;
     }
 
     public Sport getSport(String sportString) {
@@ -99,8 +125,13 @@ public class Speicher {
     public void saveSport(Sport sport) {
         datenSpeicherohneRedundanz(sport.sportToString(), pfadSports);
     }
+
     public void saveGame(Game game) {
         datenSpeicherohneRedundanz(game.gameToString(), pfadGames);
+    }
+
+    public void savePflege(Pflege pflege) {
+        datenSpeicherohneRedundanz(pflege.pflegeToString(), pfadPflege);
     }
 
 }

@@ -14,12 +14,17 @@ public class Food {
     private int hungerValue;
     private int thirstValue;
     private int energyValue;
+    private int hygieneValue;
+    private int harndrangValue;
+    private int toiletValue;
 
     public Food(String description, int fatValue,
                 int nutrientsValue, int healthynessValue,
                 boolean vegetarian, int moodLevel,
                 int hungerValue, int thirstValue,
-                int energyValue) {
+                int energyValue, int hygieneValue,
+                int harndrangValue, int toiletValue
+    ) {
         this.description = description;
         this.fatValue = fatValue;
         this.nutrientsValue = nutrientsValue;
@@ -29,6 +34,9 @@ public class Food {
         this.hungerValue = hungerValue;
         this.thirstValue = thirstValue;
         this.energyValue = energyValue;
+        this.harndrangValue = harndrangValue;
+        this.hygieneValue = hygieneValue;
+        this.toiletValue = toiletValue;
 
     }
 
@@ -68,6 +76,18 @@ public class Food {
         return energyValue;
     }
 
+    public int getHarndrangValue() {
+        return harndrangValue;
+    }
+
+    public int getToiletValue() {
+        return toiletValue;
+    }
+
+    public int getHygieneValue() {
+        return hygieneValue;
+    }
+
 
     public String foodToString() {
         return getDescription()
@@ -79,6 +99,9 @@ public class Food {
                 + "," + getHungerValue()
                 + "," + getThirstValue()
                 + "," + getEnergyValue()
+                + "," + getHarndrangValue()
+                + "," + getToiletValue()
+                + "," + getHygieneValue()
                 + "\n";
     }
 

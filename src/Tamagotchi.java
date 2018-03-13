@@ -2,24 +2,35 @@ public class Tamagotchi {
     UiUtils utils;
     private int fat = 0;
     private int nutrients = 0;
-    private int energie = 0;
+    private double energie = 0;
     private int healthynesse = 0;
     public int vegetarian = 0;
     public int vegicounter;
     private int mood = 0;
-    private int hunger = 0;
-    private int thirst = 0;
+    private double hunger = 0;
+    private double thirst = 0;
     private double endurance = 0;
     private double strength = 0;
+    private double hygiene = 0;
+    private double harndrang = 0;
+    private double toilet = 0;
+    private double fatigue = 0;
+
+
     private int ichPlatzegleich = 0;
     private int ichPlatzegleichDrink = 0;
+    private int pflegecounter = 0;
+    private double sleepCounter = 0;
 
     final int maxSatiation = 100;
     final int maxThirst = 100;
-    public int minimumSatusValue = 0;
-    public int maximumSatusValue = 1000;
-    public int doomCounter;
-    public boolean awake = true;
+    private int minimumSatusValue = 0;
+    private int maximumSatusValue = 1000;
+    private int doomCounter;
+    private boolean awake = true;
+
+    private boolean alive = true;
+    Speicher speicher;
 
     /*public Tamagotchi(int fat,int nutrients,int energie,
                       int healthynesse,int vegetarian, int vegicounter,
@@ -43,9 +54,12 @@ public class Tamagotchi {
     }*/
 
 
-    public void essen(Food food) {
-
+    public boolean essen(Food food) {
+        if (!awake) {
+            return false;
+        }
         fat += food.getFatValue();
+        limit(fat, 1000, 0);
         nutrients += food.getNutrientsValue();
         if (food.isVegetarian() == true) {
             this.vegetarian++;
@@ -54,8 +68,11 @@ public class Tamagotchi {
             this.vegicounter++;
         }
         energie += food.getEnergyValue();
+        limit(energie, 100, 0);
         healthynesse += food.getHealthynessValue();
+        limit(healthynesse, 100, 0);
         mood += food.getMoodLevel();
+        limit(mood, 100, 0);
 
         //Hungerberechnung
         if ((hunger += food.getHungerValue()) > maxSatiation) {
@@ -91,9 +108,13 @@ public class Tamagotchi {
             thirst += food.getThirstValue();
             ichPlatzegleichDrink = 0;
         }
+        return true;
     }
 
-    public void workout(Sport sport) {
+    public boolean workout(Sport sport) {
+        if (!awake) {
+            return false;
+        }
         if (fat < 5) {
             fat += sport.getFatValueSport();
             healthynesse += sport.getHealthynessValueSport();
@@ -113,9 +134,13 @@ public class Tamagotchi {
             thirst += sport.getThirstValueSport();
             energie += sport.getEnergyValueSport();
         }
+        return true;
     }
 
-    public void spielen(Game game) {
+    public boolean spielen(Game game) {
+        if (!awake) {
+            return false;
+        }
         fat += game.getFatValueGame();
         healthynesse += game.getHealthynessValueGame();
         mood += game.getMoodLevelGame();
@@ -124,6 +149,52 @@ public class Tamagotchi {
         hunger += game.getHungerValueGame();
         thirst += game.getThirstValueGame();
         energie += game.getEnergyValueGame();
+        return true;
+    }
+
+    public boolean pflegen(Pflege pflege) {
+        if (!awake) {
+            return false;
+        }
+        if (speicher.getPflege("Duschen").equals(pflege)) {
+            if (pflegecounter > 3) {
+                return false;
+            } else {
+                nutrients += pflege.getNutrientsValue();
+                healthynesse += pflege.getHealthynessValue();
+                hygiene += pflege.getHygieneValue();
+                mood += pflege.getMoodLevel();
+                hunger += pflege.getHungerValue();
+                thirst += pflege.getThirstValue();
+                energie += pflege.getEnergyValue();
+                pflegecounter++;
+                return true;
+
+            }
+        }
+
+        nutrients += pflege.getNutrientsValue();
+        healthynesse += pflege.getHealthynessValue();
+        hygiene += pflege.getHygieneValue();
+        mood += pflege.getMoodLevel();
+        hunger += pflege.getHungerValue();
+        thirst += pflege.getThirstValue();
+        energie += pflege.getEnergyValue();
+        return true;
+    }
+
+    public int duschCounter(int pflegecounter) {
+
+        return pflegecounter++;
+
+    }
+
+    public int getPflegecounter() {
+        return this.pflegecounter;
+    }
+
+    public void setPflegecounter(int newPflegecounter) {
+        this.pflegecounter = newPflegecounter;
     }
 
     public void hatNochEnergieFuer(Game game) {
@@ -176,11 +247,11 @@ public class Tamagotchi {
         this.hunger = newHunger;
     }
 
-    public int getHunger() {
+    public double getHunger() {
         return this.hunger;
     }
 
-    public int getThirst() {
+    public double getThirst() {
         return this.thirst;
     }
 
@@ -192,7 +263,7 @@ public class Tamagotchi {
         return this.healthynesse;
     }
 
-    public int getEnergie() {
+    public double getEnergie() {
         return this.energie;
     }
 
@@ -204,6 +275,18 @@ public class Tamagotchi {
         return this.strength;
     }
 
+    public double getHygiene() {
+        return hygiene;
+    }
+
+    public double getHarndrang() {
+        return harndrang;
+    }
+
+    public double getToilet() {
+        return toilet;
+    }
+
 
     public boolean einschlafen() {
         if (awake == true)
@@ -213,7 +296,133 @@ public class Tamagotchi {
         return awake;
     }
 
+    public void isAwake() {
+        if (awake == true) {
+            Thread t = new Thread(() -> {
+                while (awake == true) {
+                    try {
+                        Thread.sleep(600000);
+                        this.fatigue = fatigue - 0.8;
+                        this.energie = energie - 0.92;
+                        this.hunger = hunger - 3;
+                        this.thirst = thirst - 4;
+                        this.hygiene = hygiene - 1;
+                        this.toilet = toilet + 1;
+                        this.harndrang = harndrang + 2;
+                        this.sleepCounter = sleepCounter - 2.5;
+                        //pflegecounter wird hier reduziert um eine Nutzung von Duschen etc wieder zu ermöglichen
+                        if (pflegecounter >= 1) {
+                            pflegecounter--;
+                        }
+
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t.start();
+        }
+
+    }
+
+
+    public void schlafen() {
+        awake = false;
+        if (awake == false) {
+            Thread t = new Thread(() -> {
+                while (awake == false) {
+                    try {
+                        if (sleepCounter < 6) {
+                            Thread.sleep(600000);
+                            this.sleepCounter = sleepCounter++;
+                            this.fatigue = fatigue + 1;
+                            this.energie = energie + 4;
+                            this.hunger = hunger - 0.8;
+                            this.thirst = thirst - 0.9;
+                            this.hygiene = hygiene - 0.5;
+                            this.toilet = toilet + 0.8;
+                            this.harndrang = harndrang + 0.8;
+
+                            if (pflegecounter >= 1) {
+                                pflegecounter--;
+                            }
+                        } else {
+                            Thread.sleep(600000);
+                            this.sleepCounter = sleepCounter++;
+                            this.fatigue = fatigue + 2.2;
+                            this.energie = energie + 2.8;
+                            this.hunger = hunger - 0.8;
+                            this.thirst = thirst - 0.9;
+                            this.hygiene = hygiene - 0.5;
+                            this.toilet = toilet + 0.8;
+                            this.harndrang = harndrang + 0.8;
+
+                            if (pflegecounter >= 1) {
+                                pflegecounter--;
+                            }
+
+                            if (sleepCounter >= 60) {
+                                awake = true;
+                            } else {
+                                awake = false;
+                            }
+                        }
+
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t.start();
+        }
+
+    }
+
+    public void nickerchen() {
+        awake = false;
+        awake = false;
+        if (awake == false) {
+            Thread t = new Thread(() -> {
+                while (awake == false) {
+                    try {
+
+                        Thread.sleep(600000);
+                        this.sleepCounter = sleepCounter++;
+                        this.fatigue = fatigue + 1;
+                        this.energie = energie + 4;
+                        this.hunger = hunger - 1;
+                        this.thirst = thirst - 4;
+                        this.hygiene = hygiene - 1;
+                        this.toilet = toilet + 1;
+                        this.harndrang = harndrang + 2;
+
+                        if (pflegecounter >= 1) {
+                            pflegecounter--;
+                        }
+
+                        if (sleepCounter >= 6) {
+                            awake = true;
+                        } else {
+                            awake = false;
+                        }
+
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t.start();
+        }
+
+    }
+
     public boolean aufwecken() {
+        if (fatigue > 60 && sleepCounter < 36) {
+            this.mood = mood - 10;
+        }
         return awake = true;
     }
 
@@ -221,33 +430,58 @@ public class Tamagotchi {
         return this.doomCounter;
     }
 
+    public boolean getAwake() {
+        return this.awake;
+    }
+
     public void setDoomCounter(int newDoomcounter) {
         this.doomCounter = newDoomcounter;
     }
 
+    public void setEnergie(double newEnergie) {
+        this.energie = newEnergie;
+    }
 
-    // während das Tamagotchi schläft können keine Aktionen ausgeführt weden
-    // außer aufwecken wobei man natürlich trotzdem in die Menüs kann
 
-
-    public int limitOfStatusValues(int Values) {
-        int i = Values;
+    public int limitOfStatusValues(int values) {
+        int i = values;
         if (i <= minimumSatusValue) {
             doomCounter++;
-            Values = minimumSatusValue;
+            values = minimumSatusValue;
         }
 
         if (i >= maximumSatusValue) {
             doomCounter++;
-            Values = maximumSatusValue;
-        } else Values = Values;
-        return Values;
+            values = maximumSatusValue;
+        } else values = values;
+        return values;
+    }
+
+    public int limit(int testant, int max, int min) {
+        if (testant < min) {
+            return min;
+        }
+        if (testant > max) {
+            return max;
+        }
+
+        return testant;
+    }
+
+    public double limit(double testant, double max, double min) {
+        if (testant < min) {
+            return min;
+        }
+        if (testant > max) {
+            return max;
+        }
+
+        return testant;
     }
 
     public void sterben() {
         if (doomCounter > 10) {
-            double die = 0;
-            die = Math.random();
+            double die = Math.random();
             if (die > 0) {
                 die += die;
             }

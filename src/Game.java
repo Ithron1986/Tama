@@ -8,12 +8,15 @@ public class Game {
     private int hungerValueGame;
     private int thirstValueGame;
     private int energyValueGame;
+    private int hygieneValueGame;
 
 
     public Game(String descriptionGame, int fatValueGame,
                 int healthynessValueGame, int moodLevelGame,
                 double strenghtValueGame, double enduranceLevelGame,
-                int hungerValueGame, int thirstValueGame, int energyValueGame) {
+                int hungerValueGame, int thirstValueGame,
+                int energyValueGame, int hygieneValueGame
+    ) {
 
         this.descriptionGame = descriptionGame;
         this.fatValueGame = fatValueGame;
@@ -24,6 +27,7 @@ public class Game {
         this.hungerValueGame = hungerValueGame;
         this.thirstValueGame = thirstValueGame;
         this.energyValueGame = energyValueGame;
+        this.hygieneValueGame = hygieneValueGame;
 
 
     }
@@ -64,6 +68,11 @@ public class Game {
         return energyValueGame;
     }
 
+    public int getHygieneValueGame() {
+        return hygieneValueGame;
+    }
+
+
     public String gameToString() {
         return getDescriptionGame()
                 + "," + getFatValueGame()
@@ -74,6 +83,7 @@ public class Game {
                 + "," + getHungerValueGame()
                 + "," + getThirstValueGame()
                 + "," + getEnergyValueGame()
+                + "," + getHygieneValueGame()
                 + "\n";
     }
 

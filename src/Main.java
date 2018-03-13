@@ -6,7 +6,7 @@ import static javafx.application.Application.launch;
 public class Main extends Application {
     public static void main(String[] args) {
         Speicher speicher = new Speicher();
-        Food eier = new Food("Eier", 1, 4, 1, false, 2, 2, -1,-1);
+        Food eier = new Food("Eier", 1, 4, 1, false, 2, 2, -1, -1, -2, 0, 0);
 
         speicher.saveEssen(eier);
 
