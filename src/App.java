@@ -79,9 +79,6 @@ public class App {
 
         //Hbox Oben Main
         HBox hBoxObenMain = creatingHBox();
-        GridPane grid = new GridPane();
-        ColumnConstraints col = new ColumnConstraints();
-        col.setPercentWidth(20.0);
         Button buttonEssen = new Button("Essen");
 
         buttonEssen.setOnAction(e -> {
@@ -95,12 +92,20 @@ public class App {
         Button buttonSchlafen = new Button("Schlafen");
         buttonSchlafen.setOnAction(e -> sleepingScreen());
 
-        grid.getColumnConstraints().add(col);
-        grid.getChildren().addAll(buttonEssen, buttonSpielen, buttonSport, buttonSchlafen);
-        hBoxObenMain.getChildren().add(grid);
+        hBoxObenMain.getChildren().addAll(buttonEssen, buttonSpielen, buttonSport, buttonSchlafen);
+
         //Hbox Unten Main
+        HBox hBoxUntenMain = creatingHBox();
+        Button buttonStatus = new Button("Status");
+        buttonStatus.setOnAction(e -> statusScreen());
+        Button buttonPflege = new Button("Pflege");
+        buttonPflege.setOnAction(e -> pflegeScreen());
+        Button buttonEinstellungen = new Button("Einstellungen");
+        buttonEinstellungen.setOnAction(e -> einstellungsScreen());
 
+        hBoxUntenMain.getChildren().addAll(buttonStatus, buttonPflege, buttonEinstellungen);
 
+        GridPane grid = new GridPane();
 /*
 
         // TabPaneOben
@@ -225,12 +230,14 @@ public class App {
         vbox.getChildren().addAll(tabPaneMainOben, tabPaneMainBott);*/
 
         this.mainLayout.setTop(hBoxObenMain);
+        this.mainLayout.setCenter(grid);
+        this.mainLayout.setBottom(hBoxUntenMain);
 
     }
 
     public void pflegeScreen() {
         // TabPaneUnten
-        TabPane tabPanePflege = new TabPane();
+    /*    TabPane tabPanePflege = new TabPane();
         tabPanePflege.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         tabPanePflege.setSide(Side.BOTTOM);
         tabPanePflege.setTabMaxHeight(40.0);
@@ -248,7 +255,7 @@ public class App {
         tabPflege.setContent(new Rectangle(1600, 860, Color.WHITE));
         tabStatus.setContent(new Rectangle(1600, 860, Color.WHITE));
         tabEinstellungen.setContent(new Rectangle(1600, 860, Color.WHITE));
-
+*/
 
         //Gridpane Center
         int maxNumberColumn = 11;
@@ -259,22 +266,22 @@ public class App {
                 .addEmptyRow();
 
         for (Pflege pflege : speicher.getAllPflege().values()) {
-            formbuilder.addButton(e -> /*if (speicher.getPflege("Duschen").equals(pflege)) {
-                     */ tamagotchi.pflegen(pflege)/*;
-            } else {tamagotchi.pflegen(pflege);}*/
+            formbuilder.addButton(e ->
+                            tamagotchi.pflegen(pflege)
 
 
                     , pflege.getDescription());
+
         }
 
         GridPane pflegePane = formbuilder.build();
 
-        tabPflege.setContent(pflegePane);
+    /*    tabPflege.setContent(pflegePane);
         tabPanePflege.getTabs().
 
                 addAll(tabPflege, tabStatus, tabEinstellungen);
 
-        this.mainLayout.setTop(tabPanePflege);
+        this.mainLayout.setTop(tabPanePflege);*/
         this.mainLayout.setCenter(pflegePane);
 
     }
@@ -460,6 +467,10 @@ public class App {
     }
 
     public void sleepingScreen() {
+
+    }
+
+    public void einstellungsScreen() {
 
     }
 }

@@ -78,6 +78,7 @@ public class Formbuilder {
     public Formbuilder addButton(EventHandler<ActionEvent> handler, String buttonLabel) {
         Button button = new Button(buttonLabel);
         button.setOnAction(handler);
+        button.setPrefSize(300,8);
         final int finalRowIndex = 2;
         if (currentRowIndex <= maxNumberRows) {
             this.result.add(button, currentColIndex, currentRowIndex);
