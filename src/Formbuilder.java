@@ -1,3 +1,5 @@
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.HorizontalDirection;
 import javafx.geometry.Insets;
@@ -9,6 +11,8 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.event.ActionEvent;
+import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 
 
 import java.util.HashMap;
@@ -64,6 +68,22 @@ public class Formbuilder {
         currentRowIndex++;
         return this;
     }
+
+    public Formbuilder addProgressBar(String name, DoubleProperty statuswert) {
+        Label label = new Label(name);
+        ProgressBar progressBar = new ProgressBar(0);
+        progressBar.progressProperty().bind(statuswert);
+        Label label2 = new Label();
+        StringConverter<Number> converter = new NumberStringConverter();
+        Bindings.bindBidirectional(label2.textProperty(),statuswert,converter);
+        this.result.add(label, currentColIndex, currentRowIndex);
+        this.result.add(label2, currentColIndex + 3, currentRowIndex);
+        this.result.add(progressBar, currentColIndex + 1, currentRowIndex, 2, 1);
+        currentRowIndex++;
+        return this;
+    }
+
+
 
 
     public Map<String, TextInputControl> getControls() {

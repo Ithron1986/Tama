@@ -1,33 +1,132 @@
-public class Tamagotchi {
-    UiUtils utils;
-    private int fat = 0;
-    private int nutrients = 0;
-    private double energie = 0;
-    private int healthynesse = 0;
-    public int vegetarian = 0;
-    public int vegicounter;
-    private int mood = 0;
-    private double hunger = 0;
-    private double thirst = 0;
-    private double endurance = 0;
-    private double strength = 0;
-    private double hygiene = 0;
-    private double harndrang = 0;
-    private double toilet = 0;
-    private double fatigue = 0;
+import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
+public class Tamagotchi {
+    private DoubleProperty fat = new SimpleDoubleProperty(0);
+
+    public DoubleProperty fatProperty() {
+        return this.fat;
+    }
+
+    public void setFat(double fat) {
+        this.fat.setValue(fat);
+    }
+
+    public double getFat() {
+        return this.fat.get();
+    }
+
+    private DoubleProperty nutrients = new SimpleDoubleProperty(0);
+
+    public DoubleProperty nutrientsPorperty() {
+        return this.nutrients;
+    }
+
+    public void setNutrients(double nutrients) {
+        this.nutrients.setValue(nutrients);
+    }
+
+    public double getNutrients() {
+        return this.nutrients.get();
+    }
+
+    private DoubleProperty energie = new SimpleDoubleProperty(0);
+
+    public DoubleProperty energiePorperty() {
+        return this.energie;
+    }
+
+    public void setEnergie(double energie) {
+        this.energie.setValue(energie);
+    }
+
+    public double getEnergie() {
+        return this.energie.get();
+    }
+
+    private DoubleProperty healthynesse = new SimpleDoubleProperty(0);
+
+    public DoubleProperty healthynessProperty() {
+        return this.healthynesse;
+    }
+
+    public void setHealthynesse(double healthynesse) {
+        this.healthynesse.setValue(healthynesse);
+    }
+
+    public double getHealthynesse() {
+        return this.healthynesse.get();
+    }
+
+    private DoubleProperty mood = new SimpleDoubleProperty(0);
+
+    public DoubleProperty moodPorperty() {
+        return this.mood;
+    }
+
+    public void setMood(double mood) {
+        this.mood.setValue(mood);
+    }
+
+    public double getMood() {
+        return this.mood.get();
+    }
+
+    private DoubleProperty hunger = new SimpleDoubleProperty(0);
+
+    public DoubleProperty hungerPorperty() {
+        return this.hunger;
+    }
+
+    public void setHunger(double hunger) {
+        this.hunger.setValue(hunger);
+    }
+
+    public double getHunger() {
+        return this.hunger.get();
+    }
+
+    private DoubleProperty thirst = new SimpleDoubleProperty(0);
+
+
+    public DoubleProperty thirstPorperty() {
+        return this.thirst;
+    }
+
+    public void setThirst(double thirst) {
+        this.thirst.setValue(thirst);
+    }
+
+    public double getThirst() {
+        return this.thirst.get();
+    }
+
+    private DoubleProperty endurance = new SimpleDoubleProperty(0);
+
+
+
+
+    private DoubleProperty strength = new SimpleDoubleProperty(0);
+    private DoubleProperty hygiene = new SimpleDoubleProperty(0);
+    private DoubleProperty harndrang = new SimpleDoubleProperty(0);
+    private DoubleProperty toilet = new SimpleDoubleProperty(0);
+    private DoubleProperty fatigue = new SimpleDoubleProperty(0);
+    private BooleanProperty awake = new SimpleBooleanProperty(true);
 
     private int ichPlatzegleich = 0;
     private int ichPlatzegleichDrink = 0;
     private int pflegecounter = 0;
     private double sleepCounter = 0;
+    public int vegicounter;
+    public int vegetarian = 0;
 
     final int maxSatiation = 100;
     final int maxThirst = 100;
     private int minimumSatusValue = 0;
     private int maximumSatusValue = 1000;
     private int doomCounter;
-    private boolean awake = true;
+
 
     private boolean alive = true;
     Speicher speicher;
@@ -53,14 +152,24 @@ public class Tamagotchi {
 
     }*/
 
+    public Tamagotchi() {
+
+        this.fat.addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() > 100) {
+                fat.set(100);
+            }
+        });
+    }
+
 
     public boolean essen(Food food) {
         if (!awake) {
             return false;
         }
-        fat += food.getFatValue();
-        limit(fat, 1000, 0);
-        nutrients += food.getNutrientsValue();
+
+        fat.add(food.getFatValue());
+        limit(fat.get(), 1000, 0);
+        nutrients.add(food.getNutrientsValue());
         if (food.isVegetarian() == true) {
             this.vegetarian++;
             this.vegicounter++;
@@ -115,8 +224,9 @@ public class Tamagotchi {
         if (!awake) {
             return false;
         }
-        if (fat < 5) {
-            fat += sport.getFatValueSport();
+        fat.add(sport.getFatValueSport());
+
+        if (fat.get() < 5) {
             healthynesse += sport.getHealthynessValueSport();
             mood += 1 / 2 * (sport.getMoodLevelSport());
             strength += 1 / 2 * (sport.getStrenghtValueSport());
@@ -125,7 +235,6 @@ public class Tamagotchi {
             thirst += sport.getThirstValueSport();
             energie += 2 * (sport.getEnergyValueSport());
         } else {
-            fat += sport.getFatValueSport();
             healthynesse += sport.getHealthynessValueSport();
             mood += sport.getMoodLevelSport();
             strength += sport.getStrenghtValueSport();
@@ -141,7 +250,7 @@ public class Tamagotchi {
         if (!awake) {
             return false;
         }
-        fat += game.getFatValueGame();
+        fat.add(game.getFatValueGame());
         healthynesse += game.getHealthynessValueGame();
         mood += game.getMoodLevelGame();
         strength += game.getStrenghtValueGame();
@@ -202,13 +311,13 @@ public class Tamagotchi {
             spielen(game);
         } else {
             if (energie < 5) {
-                utils.createPopup("Ich bin zu Müde zum spielen!!!\n\r lass mich Schlafen");
+                /*utils.createPopup("Ich bin zu Müde zum spielen!!!\n\r lass mich Schlafen");*/
             }
             if (thirst < 3) {
-                utils.createPopup("Ich will nicht spielen!!!\n\r Ich bin soooooooo durstig");
+                /* utils.createPopup("Ich will nicht spielen!!!\n\r Ich bin soooooooo durstig");*/
             }
             if (hunger < 3) {
-                utils.createPopup("Ich kann nicht spielen !!!\n\r Ich bin soooooooo hungrig");
+                /*utils.createPopup("Ich kann nicht spielen !!!\n\r Ich bin soooooooo hungrig");*/
             }
         }
     }
@@ -218,13 +327,13 @@ public class Tamagotchi {
             workout(sport);
         } else {
             if (energie < 5) {
-                utils.createPopup("Ich bin zu Müde für Sport!!!\n\rlass mich Schlafen");
+                /*utils.createPopup("Ich bin zu Müde für Sport!!!\n\rlass mich Schlafen");*/
             }
             if (thirst < 3) {
-                utils.createPopup("Ich kann keinen Sport treiben!!!\n\rIch bin soooooooo durstig");
+                /*utils.createPopup("Ich kann keinen Sport treiben!!!\n\rIch bin soooooooo durstig");*/
             }
             if (hunger < 3) {
-                utils.createPopup("Ich kann keinen Sport treiben!!!\n\rIch bin soooooooo hungrig");
+                /*utils.createPopup("Ich kann keinen Sport treiben!!!\n\rIch bin soooooooo hungrig");*/
             }
         }
 
@@ -243,40 +352,21 @@ public class Tamagotchi {
         ichPlatzegleich++;
     }
 
-    public void setHunger(int newHunger) {
-        this.hunger = newHunger;
-    }
 
-    public double getHunger() {
-        return this.hunger;
-    }
 
-    public double getThirst() {
-        return this.thirst;
-    }
 
-    public int getMood() {
-        return this.mood;
-    }
 
-    public int getHealthynesse() {
-        return this.healthynesse;
-    }
-
-    public double getEnergie() {
-        return this.energie;
-    }
 
     public double getEndurance() {
-        return this.endurance;
+        return this.endurance.get();
     }
 
     public double getStrength() {
-        return this.strength;
+        return this.strength.get();
     }
 
     public double getHygiene() {
-        return hygiene;
+        return hygiene.get();
     }
 
     public double getHarndrang() {
@@ -431,15 +521,11 @@ public class Tamagotchi {
     }
 
     public boolean getAwake() {
-        return this.awake;
+        return this.awake.get();
     }
 
     public void setDoomCounter(int newDoomcounter) {
         this.doomCounter = newDoomcounter;
-    }
-
-    public void setEnergie(double newEnergie) {
-        this.energie = newEnergie;
     }
 
 
@@ -493,4 +579,9 @@ public class Tamagotchi {
 
     public void delete() {
     }
+
+
+
+
+
 }

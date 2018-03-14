@@ -1,7 +1,10 @@
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 
@@ -9,6 +12,8 @@ import javafx.stage.Popup;
 public class UiUtils {
     private static int maxNumberCR = 100;
     App app;
+    Farbe farbe = Farbe.Blau;
+
 
     public static GridPane creatingGrid(int maxNumberColumn, int maxNumberRows) {
         GridPane newGrid = new GridPane();
@@ -28,7 +33,25 @@ public class UiUtils {
         return newGrid;
     }
 
-    public void createPopup(String text) {
+    public static Button creatingButton(String title) {
+       return creatingButton(title,Farbe.Blau);
+    }
+
+    public static Button creatingButton(String title, Farbe farbe) {
+        Button button = new Button(title);
+        button.setStyle(farbe.farbe());
+        button.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+        button.setPrefSize(400, 8);
+        button.setMaxSize(800, 8);
+        return button;
+    }
+
+    public static Button creatingButton() {
+        Button button = new Button();
+        return button;
+    }
+
+    public static void createPopup(String text) {
         Popup popup = new Popup();
         Text newText = new Text(text);
         popup.getContent().addAll(newText);
