@@ -284,6 +284,16 @@ public class App {
         slider.setMax(1);
         slider.valueProperty().bindBidirectional(tamagotchi.fatProperty());
 
+     /*    tamagotchi.einschlafen();
+
+
+        tamagotchi.awakeProperty().addListener((value, old, newValue) -> {
+
+            old.booleanValue();
+            newValue.booleanValue();
+            value.getValue().booleanValue();
+        });*/
+
         statusPane.add(slider,5,5);
 
         statusPane.setGridLinesVisible(true);

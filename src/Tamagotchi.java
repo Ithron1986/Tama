@@ -104,15 +104,101 @@ public class Tamagotchi {
 
     private DoubleProperty endurance = new SimpleDoubleProperty(0);
 
+    public DoubleProperty enduranceProperty() {
+        return this.endurance;
+    }
 
+    public void setEndurance(double endurance) {
+        this.endurance.setValue(endurance);
+    }
 
+    public double getEndurance() {
+        return this.endurance.get();
+    }
 
     private DoubleProperty strength = new SimpleDoubleProperty(0);
+
+    public DoubleProperty strengthProperty() {
+        return this.strength;
+    }
+
+    public void setStrength(double strength) {
+        this.strength.setValue(strength);
+    }
+
+    public double getStrength() {
+        return this.strength.get();
+    }
+
     private DoubleProperty hygiene = new SimpleDoubleProperty(0);
+
+    public DoubleProperty hygieneProperty() {
+        return this.hygiene;
+    }
+
+    public void setHygiene(double hygiene) {
+        this.hygiene.setValue(hygiene);
+    }
+
+    public double getHygiene() {
+        return this.hygiene.get();
+    }
+
     private DoubleProperty harndrang = new SimpleDoubleProperty(0);
+
+    public DoubleProperty harndrangProperty() {
+        return this.harndrang;
+    }
+
+    public void setHarndrang(double harndrang) {
+        this.harndrang.setValue(harndrang);
+    }
+
+    public double getHarndrang() {
+        return this.harndrang.get();
+    }
+
     private DoubleProperty toilet = new SimpleDoubleProperty(0);
+
+    public DoubleProperty toiletProperty() {
+        return this.toilet;
+    }
+
+    public void setToilet(double toilet) {
+        this.toilet.setValue(toilet);
+    }
+
+    public double getToilet() {
+        return this.toilet.get();
+    }
+
     private DoubleProperty fatigue = new SimpleDoubleProperty(0);
+
+    public DoubleProperty fatigueProperty() {
+        return this.fatigue;
+    }
+
+    public void setFatigue(double fatigue) {
+        this.fatigue.setValue(fatigue);
+    }
+
+    public double getFatigue() {
+        return this.fatigue.get();
+    }
+
     private BooleanProperty awake = new SimpleBooleanProperty(true);
+
+    public BooleanProperty awakeProperty() {
+        return this.awake;
+    }
+
+    public void setAwake(boolean awake) {
+        this.awake.setValue(awake);
+    }
+
+    public boolean getAwake() {
+        return this.awake.get();
+    }
 
     private int ichPlatzegleich = 0;
     private int ichPlatzegleichDrink = 0;
@@ -163,7 +249,7 @@ public class Tamagotchi {
 
 
     public boolean essen(Food food) {
-        if (!awake) {
+        if (!awake.get()) {
             return false;
         }
 
@@ -176,16 +262,17 @@ public class Tamagotchi {
         } else {
             this.vegicounter++;
         }
-        energie += food.getEnergyValue();
-        limit(energie, 100, 0);
-        healthynesse += food.getHealthynessValue();
-        limit(healthynesse, 100, 0);
-        mood += food.getMoodLevel();
-        limit(mood, 100, 0);
+        energie.add(food.getEnergyValue());
+        limit(energie.get(), 100, 0);
+        healthynesse.add(food.getHealthynessValue());
+        limit(healthynesse.get(), 100, 0);
+        mood.add(food.getMoodLevel());
+        limit(mood.get(), 100, 0);
 
         //Hungerberechnung
-        if ((hunger += food.getHungerValue()) > maxSatiation) {
-            hunger = maxSatiation;
+        double possibleResult = hunger.get() + food.getHungerValue();
+        if (possibleResult > maxSatiation) {
+            hunger.set(maxSatiation);
             ichPlatzegleich++;
             if (ichPlatzegleich == 1) {
                 ichBinVoll();
@@ -197,12 +284,13 @@ public class Tamagotchi {
                 setDoomCounter(getDoomcounter() + 1);
             }
         } else {
-            hunger += food.getHungerValue();
+            hunger.add(food.getHungerValue());
             ichPlatzegleich = 0;
         }
         //Durstberechnung
-        if ((thirst += food.getThirstValue()) > maxThirst) {
-            thirst = maxThirst;
+        possibleResult = thirst.get() + food.getThirstValue();
+        if (possibleResult > maxThirst) {
+            thirst.set(maxThirst);
             ichPlatzegleichDrink++;
             if (ichPlatzegleichDrink == 1) {
                 ichBinVoll();
@@ -214,81 +302,81 @@ public class Tamagotchi {
                 setDoomCounter(getDoomcounter() + 1);
             }
         } else {
-            thirst += food.getThirstValue();
+            thirst.add(food.getThirstValue());
             ichPlatzegleichDrink = 0;
         }
         return true;
     }
 
     public boolean workout(Sport sport) {
-        if (!awake) {
+        if (!awake.get()) {
             return false;
         }
         fat.add(sport.getFatValueSport());
 
         if (fat.get() < 5) {
-            healthynesse += sport.getHealthynessValueSport();
-            mood += 1 / 2 * (sport.getMoodLevelSport());
-            strength += 1 / 2 * (sport.getStrenghtValueSport());
-            endurance += 1 / 2 * (sport.getEnduranceLevelSport());
-            hunger += 2 * (sport.getHungerValueSport());
-            thirst += sport.getThirstValueSport();
-            energie += 2 * (sport.getEnergyValueSport());
+            healthynesse.add(sport.getHealthynessValueSport());
+            mood.add(1 / 2 * (sport.getMoodLevelSport()));
+            strength.add(1 / 2 * (sport.getStrenghtValueSport()));
+            endurance.add(1 / 2 * (sport.getEnduranceLevelSport()));
+            hunger.add(2 * (sport.getHungerValueSport()));
+            thirst.add(sport.getThirstValueSport());
+            energie.add(2 * (sport.getEnergyValueSport()));
         } else {
-            healthynesse += sport.getHealthynessValueSport();
-            mood += sport.getMoodLevelSport();
-            strength += sport.getStrenghtValueSport();
-            endurance += sport.getEnduranceLevelSport();
-            hunger += sport.getHungerValueSport();
-            thirst += sport.getThirstValueSport();
-            energie += sport.getEnergyValueSport();
+            healthynesse.add(sport.getHealthynessValueSport());
+            mood.add(sport.getMoodLevelSport());
+            strength.add(sport.getStrenghtValueSport());
+            endurance.add(sport.getEnduranceLevelSport());
+            hunger.add(sport.getHungerValueSport());
+            thirst.add(sport.getThirstValueSport());
+            energie.add(sport.getEnergyValueSport());
         }
         return true;
     }
 
     public boolean spielen(Game game) {
-        if (!awake) {
+        if (!awake.get()) {
             return false;
         }
         fat.add(game.getFatValueGame());
-        healthynesse += game.getHealthynessValueGame();
-        mood += game.getMoodLevelGame();
-        strength += game.getStrenghtValueGame();
-        endurance += game.getEnduranceLevelGame();
-        hunger += game.getHungerValueGame();
-        thirst += game.getThirstValueGame();
-        energie += game.getEnergyValueGame();
+        healthynesse.add(game.getHealthynessValueGame());
+        mood.add(game.getMoodLevelGame());
+        strength.add(game.getStrenghtValueGame());
+        endurance.add(game.getEnduranceLevelGame());
+        hunger.add(game.getHungerValueGame());
+        thirst.add(game.getThirstValueGame());
+        energie.add(game.getEnergyValueGame());
         return true;
     }
 
     public boolean pflegen(Pflege pflege) {
-        if (!awake) {
+        if (!awake.get()) {
             return false;
         }
         if (speicher.getPflege("Duschen").equals(pflege)) {
             if (pflegecounter > 3) {
                 return false;
             } else {
-                nutrients += pflege.getNutrientsValue();
-                healthynesse += pflege.getHealthynessValue();
-                hygiene += pflege.getHygieneValue();
-                mood += pflege.getMoodLevel();
-                hunger += pflege.getHungerValue();
-                thirst += pflege.getThirstValue();
-                energie += pflege.getEnergyValue();
+                nutrients.add(pflege.getNutrientsValue());
+                healthynesse.add(pflege.getHealthynessValue());
+                hygiene.add(pflege.getHygieneValue());
+                mood.add(pflege.getMoodLevel());
+                hunger.add(pflege.getHungerValue());
+                thirst.add(pflege.getThirstValue());
+                energie.add(pflege.getEnergyValue());
                 pflegecounter++;
                 return true;
 
             }
         }
 
-        nutrients += pflege.getNutrientsValue();
-        healthynesse += pflege.getHealthynessValue();
-        hygiene += pflege.getHygieneValue();
-        mood += pflege.getMoodLevel();
-        hunger += pflege.getHungerValue();
-        thirst += pflege.getThirstValue();
-        energie += pflege.getEnergyValue();
+        nutrients.add(pflege.getNutrientsValue());
+        healthynesse.add(pflege.getHealthynessValue());
+        hygiene.add(pflege.getHygieneValue());
+        mood.add(pflege.getMoodLevel());
+        hunger.add(pflege.getHungerValue());
+        thirst.add(pflege.getThirstValue());
+        energie.add(pflege.getEnergyValue());
         return true;
     }
 
@@ -307,32 +395,32 @@ public class Tamagotchi {
     }
 
     public void hatNochEnergieFuer(Game game) {
-        if (energie > 5 && thirst > 3 && hunger > 3) {
+        if (energie.get() > 5 && thirst.get() > 3 && hunger.get() > 3) {
             spielen(game);
         } else {
-            if (energie < 5) {
+            if (energie.get() < 5) {
                 /*utils.createPopup("Ich bin zu Müde zum spielen!!!\n\r lass mich Schlafen");*/
             }
-            if (thirst < 3) {
+            if (thirst.get() < 3) {
                 /* utils.createPopup("Ich will nicht spielen!!!\n\r Ich bin soooooooo durstig");*/
             }
-            if (hunger < 3) {
+            if (hunger.get() < 3) {
                 /*utils.createPopup("Ich kann nicht spielen !!!\n\r Ich bin soooooooo hungrig");*/
             }
         }
     }
 
     public void hatNochEnergieFuer(Sport sport) {
-        if (energie < 5 && thirst < 3 && hunger < 3) {
+        if (energie.get() < 5 && thirst.get() < 3 && hunger.get() < 3) {
             workout(sport);
         } else {
-            if (energie < 5) {
+            if (energie.get() < 5) {
                 /*utils.createPopup("Ich bin zu Müde für Sport!!!\n\rlass mich Schlafen");*/
             }
-            if (thirst < 3) {
+            if (thirst.get() < 3) {
                 /*utils.createPopup("Ich kann keinen Sport treiben!!!\n\rIch bin soooooooo durstig");*/
             }
-            if (hunger < 3) {
+            if (hunger.get() < 3) {
                 /*utils.createPopup("Ich kann keinen Sport treiben!!!\n\rIch bin soooooooo hungrig");*/
             }
         }
@@ -341,11 +429,11 @@ public class Tamagotchi {
 
 
     public void ichBinVoll() {
-        mood = mood + 2;
+        mood.add(2);
     }
 
     public void ichWillNichtsmehr(int ubervoll) {
-        mood = mood - (1 * ubervoll);
+        mood.set(mood.get() - ubervoll);
     }
 
     public void setIchPlatzegleich() {
@@ -353,43 +441,21 @@ public class Tamagotchi {
     }
 
 
-
-
-
-
-    public double getEndurance() {
-        return this.endurance.get();
-    }
-
-    public double getStrength() {
-        return this.strength.get();
-    }
-
-    public double getHygiene() {
-        return hygiene.get();
-    }
-
-    public double getHarndrang() {
-        return harndrang;
-    }
-
-    public double getToilet() {
-        return toilet;
-    }
-
-
+    // boolean eingeschlafen = tama.einschlafen()
+    // if eingegeschlafen {...}
     public boolean einschlafen() {
-        if (awake == true)
-            awake = false;
+
+        if (awake.get())
+            awake.set(false);
         //Zugriff auf Methode die eine Bildschirmanimation bring zum ins Bett gehen.
 
-        return awake;
+        return awake.get();
     }
 
-    public void isAwake() {
-        if (awake == true) {
+    /*public void isAwake() {
+        if (awake.get()) {
             Thread t = new Thread(() -> {
-                while (awake == true) {
+                while (awake.get()) {
                     try {
                         Thread.sleep(600000);
                         this.fatigue = fatigue - 0.8;
@@ -414,8 +480,9 @@ public class Tamagotchi {
             t.start();
         }
 
-    }
+    }*/
 
+/*
 
     public void schlafen() {
         awake = false;
@@ -515,19 +582,15 @@ public class Tamagotchi {
         }
         return awake = true;
     }
+*/
 
     public int getDoomcounter() {
         return this.doomCounter;
     }
 
-    public boolean getAwake() {
-        return this.awake.get();
-    }
-
     public void setDoomCounter(int newDoomcounter) {
         this.doomCounter = newDoomcounter;
     }
-
 
     public int limitOfStatusValues(int values) {
         int i = values;
@@ -579,9 +642,6 @@ public class Tamagotchi {
 
     public void delete() {
     }
-
-
-
 
 
 }
