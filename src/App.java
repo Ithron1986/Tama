@@ -15,9 +15,9 @@ public class App {
     private Farbe farbe;
     private Scene scene;
     private Stage stage;
-    UiUtils utils = new UiUtils();
 
-    public App(Stage stage, Speicher speicher, Tamagotchi tamagotchi) {
+
+    private App(Stage stage, Speicher speicher, Tamagotchi tamagotchi) {
         this.speicher = speicher;
         this.tamagotchi = tamagotchi;
         this.mainLayout = new BorderPane();
@@ -56,22 +56,22 @@ public class App {
         return vBox;
     }
 
-    public HBox defaultHboxOben() {
+    private HBox defaultHboxOben() {
         //HBOX OBEN
         HBox hBoxOben = UiUtils.creatingHBox();
         GridPane gridHbox = new GridPane();
-        utils.creatingColumnsForHbox(4, gridHbox);
+        UiUtils.creatingColumnsForHbox(4, gridHbox);
 
-        Button essen = utils.creatingButton("Essen");
+        Button essen = UiUtils.creatingButton("Essen");
         essen.setOnAction(e -> foodScreen());
 
-        Button spielen = utils.creatingButton("Spielen");
+        Button spielen = UiUtils.creatingButton("Spielen");
         spielen.setOnAction(event -> gameScreen());
 
-        Button sport = utils.creatingButton("Sport");
+        Button sport = UiUtils.creatingButton("Sport");
         sport.setOnAction(e -> sportScreen());
 
-        Button schlafen = utils.creatingButton("Schlafen");
+        Button schlafen = UiUtils.creatingButton("Schlafen");
         schlafen.setOnAction(e -> sleepingScreen());
 
         gridHbox.add(essen, 0, 0, 1, 1);
@@ -83,22 +83,22 @@ public class App {
         return hBoxOben;
     }
 
-    public HBox defaultHboxUnten() {
+    private HBox defaultHboxUnten() {
         //Hbox Unten
-        HBox hBoxUnten = utils.creatingHBox();
+        HBox hBoxUnten = UiUtils.creatingHBox();
         GridPane gridHBoxUntenMain = new GridPane();
-        utils.creatingColumnsForHbox(3, gridHBoxUntenMain);
+        UiUtils.creatingColumnsForHbox(3, gridHBoxUntenMain);
 
         gridHBoxUntenMain.setGridLinesVisible(true);
 
 
-        Button pflege = utils.creatingButton("Pflege");
+        Button pflege = UiUtils.creatingButton("Pflege");
         pflege.setOnAction(e -> pflegeScreen());
 
-        Button status = utils.creatingButton("Status");
+        Button status = UiUtils.creatingButton("Status");
         status.setOnAction(e -> statusScreen());
 
-        Button einstellungen = utils.creatingButton("Einstellungen");
+        Button einstellungen = UiUtils.creatingButton("Einstellungen");
         einstellungen.setOnAction(e -> einstellungsScreen());
 
 
@@ -111,7 +111,7 @@ public class App {
     }
 
 
-    public void mainScreen() {
+    private void mainScreen() {
 
 
         //CenterStage
@@ -124,7 +124,7 @@ public class App {
 
     }
 
-    public void pflegeScreen() {
+    private void pflegeScreen() {
 
 
         //Gridpane Center
@@ -151,7 +151,7 @@ public class App {
     }
 
 
-    public void foodScreen() {
+    private void foodScreen() {
 
         //HBOX OBEN
         HBox hBoxOben = UiUtils.creatingHBox();
@@ -202,7 +202,7 @@ public class App {
         this.mainLayout.setBottom(defaultHboxUnten());
     }
 
-    public void statusScreen()
+    private void statusScreen()
 
     {
 
@@ -254,7 +254,7 @@ public class App {
 
     }
 
-    public void sportScreen() {
+    private void sportScreen() {
 
         //HBOX OBEN
         HBox hBoxOben = UiUtils.creatingHBox();
@@ -302,7 +302,7 @@ public class App {
         this.mainLayout.setBottom(defaultHboxUnten());
     }
 
-    public void gameScreen() {
+    private void gameScreen() {
 
 
         //HBOX OBEN
@@ -352,7 +352,7 @@ public class App {
         this.mainLayout.setBottom(defaultHboxUnten());
     }
 
-    public void sleepingScreen() {
+    private void sleepingScreen() {
 
         //HBOX OBEN
         HBox hBoxOben = UiUtils.creatingHBox();
@@ -403,7 +403,7 @@ public class App {
 
     }
 
-    public void einstellungsScreen() {
+    private void einstellungsScreen() {
 
         this.mainLayout.setTop(defaultHboxOben());
         /*this.mainLayout.setCenter(gamePane);*/
