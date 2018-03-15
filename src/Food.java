@@ -6,24 +6,24 @@ public class Food {
     private String description;
 
 
-    private int fatValue;
-    private int nutrientsValue;
-    private int healthynessValue;
+    private double fatValue;
+    private double nutrientsValue;
+    private double healthynessValue;
     private boolean vegetarian;
-    private int moodLevel;
-    private int hungerValue;
-    private int thirstValue;
-    private int energyValue;
-    private int hygieneValue;
-    private int harndrangValue;
-    private int toiletValue;
+    private double moodLevel;
+    private double hungerValue;
+    private double thirstValue;
+    private double energyValue;
+    private double hygieneValue;
+    private double harndrangValue;
+    private double toiletValue;
 
-    public Food(String description, int fatValue,
-                int nutrientsValue, int healthynessValue,
-                boolean vegetarian, int moodLevel,
-                int hungerValue, int thirstValue,
-                int energyValue, int hygieneValue,
-                int harndrangValue, int toiletValue
+    public Food(String description, double fatValue,
+                double nutrientsValue, double healthynessValue,
+                boolean vegetarian, double moodLevel,
+                double hungerValue, double thirstValue,
+                double energyValue, double hygieneValue,
+                double harndrangValue, double toiletValue
     ) {
         this.description = description;
         this.fatValue = fatValue;
@@ -44,15 +44,15 @@ public class Food {
         return description;
     }
 
-    public int getFatValue() {
+    public double getFatValue() {
         return fatValue;
     }
 
-    public int getNutrientsValue() {
+    public double getNutrientsValue() {
         return nutrientsValue;
     }
 
-    public int getHealthynessValue() {
+    public double getHealthynessValue() {
         return healthynessValue;
     }
 
@@ -60,31 +60,31 @@ public class Food {
         return vegetarian;
     }
 
-    public int getMoodLevel() {
+    public double getMoodLevel() {
         return moodLevel;
     }
 
-    public int getHungerValue() {
+    public double getHungerValue() {
         return hungerValue;
     }
 
-    public int getThirstValue() {
+    public double getThirstValue() {
         return thirstValue;
     }
 
-    public int getEnergyValue() {
+    public double getEnergyValue() {
         return energyValue;
     }
 
-    public int getHarndrangValue() {
+    public double getHarndrangValue() {
         return harndrangValue;
     }
 
-    public int getToiletValue() {
+    public double getToiletValue() {
         return toiletValue;
     }
 
-    public int getHygieneValue() {
+    public double getHygieneValue() {
         return hygieneValue;
     }
 

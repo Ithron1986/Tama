@@ -1,21 +1,21 @@
 public class Game {
     private String descriptionGame;
-    private int fatValueGame;
-    private int healthynessValueGame;
-    private int moodLevelGame;
+    private double fatValueGame;
+    private double healthynessValueGame;
+    private double moodLevelGame;
     private double strenghtValueGame;
     private double enduranceLevelGame;
-    private int hungerValueGame;
-    private int thirstValueGame;
-    private int energyValueGame;
-    private int hygieneValueGame;
+    private double hungerValueGame;
+    private double thirstValueGame;
+    private double energyValueGame;
+    private double hygieneValueGame;
 
 
-    public Game(String descriptionGame, int fatValueGame,
-                int healthynessValueGame, int moodLevelGame,
+    public Game(String descriptionGame, double fatValueGame,
+                double healthynessValueGame, double moodLevelGame,
                 double strenghtValueGame, double enduranceLevelGame,
-                int hungerValueGame, int thirstValueGame,
-                int energyValueGame, int hygieneValueGame
+                double hungerValueGame, double thirstValueGame,
+                double energyValueGame, double hygieneValueGame
     ) {
 
         this.descriptionGame = descriptionGame;
@@ -36,15 +36,15 @@ public class Game {
         return descriptionGame;
     }
 
-    public int getFatValueGame() {
+    public double getFatValueGame() {
         return fatValueGame;
     }
 
-    public int getHealthynessValueGame() {
+    public double getHealthynessValueGame() {
         return healthynessValueGame;
     }
 
-    public int getMoodLevelGame() {
+    public double getMoodLevelGame() {
         return moodLevelGame;
     }
 
@@ -56,19 +56,19 @@ public class Game {
         return enduranceLevelGame;
     }
 
-    public int getHungerValueGame() {
+    public double getHungerValueGame() {
         return hungerValueGame;
     }
 
-    public int getThirstValueGame() {
+    public double getThirstValueGame() {
         return thirstValueGame;
     }
 
-    public int getEnergyValueGame() {
+    public double getEnergyValueGame() {
         return energyValueGame;
     }
 
-    public int getHygieneValueGame() {
+    public double getHygieneValueGame() {
         return hygieneValueGame;
     }
 

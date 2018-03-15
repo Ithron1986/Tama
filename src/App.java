@@ -1,21 +1,8 @@
-import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class App {
     private Speicher speicher;
@@ -37,6 +24,19 @@ public class App {
         this.stage = stage;
         farbe = Farbe.Blau;
 
+        tamagotchi.setAwake(true);
+
+        tamagotchi.setHunger(100);
+        tamagotchi.setEnergie(100);
+        tamagotchi.setThirst(100);
+
+
+        TamagotchiService tamagotchiService = new TamagotchiService();
+
+        tamagotchiService.setOnSucceeded(e -> this.tamagotchi.changeStatus());
+
+        tamagotchiService.start();
+
 
         this.scene = new Scene(this.mainLayout, 1600, 900);
         this.stage.setScene(scene);
@@ -48,12 +48,6 @@ public class App {
     }
 
 
-    public HBox creatingHBox() {
-        HBox hBox = new HBox();
-        hBox.setStyle(farbe.farbe());
-        return hBox;
-    }
-
     private VBox creatingVBox() {
         VBox vBox = new VBox();
         vBox.setPadding(new javafx.geometry.Insets(10));
@@ -62,27 +56,11 @@ public class App {
         return vBox;
     }
 
-
-    // Der mainScreen zeigt das Tamagotchi mit den zu der Verfassung gehörigen Animation
-
-    public void mainScreen() {
-
+    public HBox defaultHboxOben() {
         //HBOX OBEN
-        HBox hBoxOben = creatingHBox();
+        HBox hBoxOben = UiUtils.creatingHBox();
         GridPane gridHbox = new GridPane();
-
-
-        for (int i = 0; i < 4; i++) {
-            ColumnConstraints col = new ColumnConstraints();
-            col.setPrefWidth(400);
-            col.setHalignment(HPos.CENTER);
-            col.setMinWidth(20);
-            gridHbox.getColumnConstraints().add(col);
-        }
-
-
-        gridHbox.setGridLinesVisible(true);
-
+        utils.creatingColumnsForHbox(4, gridHbox);
 
         Button essen = utils.creatingButton("Essen");
         essen.setOnAction(e -> foodScreen());
@@ -91,32 +69,25 @@ public class App {
         spielen.setOnAction(event -> gameScreen());
 
         Button sport = utils.creatingButton("Sport");
-        sport.setOnAction(ev -> sportScreen());
+        sport.setOnAction(e -> sportScreen());
 
         Button schlafen = utils.creatingButton("Schlafen");
         schlafen.setOnAction(e -> sleepingScreen());
-
 
         gridHbox.add(essen, 0, 0, 1, 1);
         gridHbox.add(spielen, 1, 0, 1, 1);
         gridHbox.add(sport, 2, 0, 1, 1);
         gridHbox.add(schlafen, 3, 0, 1, 1);
+
         hBoxOben.getChildren().addAll(gridHbox);
+        return hBoxOben;
+    }
 
-
-        //Hbox Unten Main
-        HBox hBoxUntenMain = creatingHBox();
+    public HBox defaultHboxUnten() {
+        //Hbox Unten
+        HBox hBoxUnten = utils.creatingHBox();
         GridPane gridHBoxUntenMain = new GridPane();
-
-
-        for (int i = 0; i < 3; i++) {
-            ColumnConstraints col = new ColumnConstraints();
-            col.setPrefWidth(400);
-            col.setHalignment(HPos.CENTER);
-            col.setMinWidth(20);
-            gridHBoxUntenMain.getColumnConstraints().add(col);
-        }
-
+        utils.creatingColumnsForHbox(3, gridHBoxUntenMain);
 
         gridHBoxUntenMain.setGridLinesVisible(true);
 
@@ -125,49 +96,36 @@ public class App {
         pflege.setOnAction(e -> pflegeScreen());
 
         Button status = utils.creatingButton("Status");
-        status.setOnAction(event -> statusScreen());
+        status.setOnAction(e -> statusScreen());
 
         Button einstellungen = utils.creatingButton("Einstellungen");
-        einstellungen.setOnAction(ev -> einstellungsScreen());
+        einstellungen.setOnAction(e -> einstellungsScreen());
 
 
         gridHBoxUntenMain.add(pflege, 0, 0, 1, 1);
         gridHBoxUntenMain.add(status, 1, 0, 1, 1);
         gridHBoxUntenMain.add(einstellungen, 2, 0, 1, 1);
-        hBoxUntenMain.getChildren().addAll(gridHBoxUntenMain);
+        hBoxUnten.getChildren().addAll(gridHBoxUntenMain);
+
+        return hBoxUnten;
+    }
+
+
+    public void mainScreen() {
 
 
         //CenterStage
         GridPane grid = new GridPane();
 
 
-        this.mainLayout.setTop(hBoxOben);
+        this.mainLayout.setTop(defaultHboxOben());
         this.mainLayout.setCenter(grid);
-        this.mainLayout.setBottom(hBoxUntenMain);
+        this.mainLayout.setBottom(defaultHboxUnten());
 
     }
 
     public void pflegeScreen() {
-        // TabPaneUnten
-    /*    TabPane tabPanePflege = new TabPane();
-        tabPanePflege.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        tabPanePflege.setSide(Side.BOTTOM);
-        tabPanePflege.setTabMaxHeight(40.0);
-        tabPanePflege.setTabMaxWidth(480);
-        tabPanePflege.setTabMinHeight(40.0);
-        tabPanePflege.setTabMinWidth(380);
 
-        Tab tabPflege = new Tab();
-        tabPflege.setText("Pflege");
-        Tab tabStatus = new Tab();
-        tabStatus.setText("Status");
-        Tab tabEinstellungen = new Tab();
-        tabEinstellungen.setText("Einstellungen");
-
-        tabPflege.setContent(new Rectangle(1600, 860, Color.WHITE));
-        tabStatus.setContent(new Rectangle(1600, 860, Color.WHITE));
-        tabEinstellungen.setContent(new Rectangle(1600, 860, Color.WHITE));
-*/
 
         //Gridpane Center
         int maxNumberColumn = 11;
@@ -187,13 +145,7 @@ public class App {
         }
 
         GridPane pflegePane = formbuilder.build();
-
-    /*    tabPflege.setContent(pflegePane);
-        tabPanePflege.getTabs().
-
-                addAll(tabPflege, tabStatus, tabEinstellungen);
-
-        this.mainLayout.setTop(tabPanePflege);*/
+        this.mainLayout.setTop(defaultHboxOben());
         this.mainLayout.setCenter(pflegePane);
 
     }
@@ -202,34 +154,25 @@ public class App {
     public void foodScreen() {
 
         //HBOX OBEN
-        HBox hBoxOben = creatingHBox();
+        HBox hBoxOben = UiUtils.creatingHBox();
         GridPane gridHbox = new GridPane();
-
-
-        for (int i = 0; i < 4; i++) {
-            ColumnConstraints col = new ColumnConstraints();
-            col.setPrefWidth(800);
-            col.setMaxWidth(800);
-            col.setHalignment(HPos.CENTER);
-            col.setMinWidth(20);
-            gridHbox.getColumnConstraints().add(col);
-        }
+        UiUtils.creatingColumnsForHbox(4, gridHbox);
 
 
         gridHbox.setGridLinesVisible(true);
 
 
-        Button essen = utils.creatingButton("Essen");
+        Button essen = UiUtils.creatingButton("Essen");
         essen.setStyle("-fx-background-color: #ffffff");
         essen.setOnAction(e -> mainScreen());
 
-        Button spielen = utils.creatingButton("Spielen");
+        Button spielen = UiUtils.creatingButton("Spielen");
         spielen.setOnAction(event -> gameScreen());
 
-        Button sport = utils.creatingButton("Sport");
+        Button sport = UiUtils.creatingButton("Sport");
         sport.setOnAction(ev -> sportScreen());
 
-        Button schlafen = utils.creatingButton("Schlafen");
+        Button schlafen = UiUtils.creatingButton("Schlafen");
         sport.setOnAction(ev -> sleepingScreen());
 
 
@@ -251,13 +194,19 @@ public class App {
         }
         GridPane essensPane = formbuilder.build();
 
+        //HboxUntenDefault
+
+
         this.mainLayout.setTop(hBoxOben);
         this.mainLayout.setCenter(essensPane);
+        this.mainLayout.setBottom(defaultHboxUnten());
     }
 
     public void statusScreen()
 
     {
+
+
         int maxNumberColumn = 11;
         int maxNumberRows = 11;
 
@@ -268,21 +217,24 @@ public class App {
         formbuilder.addHeader("Status")
                 .addEmptyRow()
                 .addEmptyRow()
-                .addTextInputField("Laune", String.valueOf(tamagotchi.getMood()), (tamagotchi.getMood() / 100))
-                .addTextInputField("Hunger", String.valueOf(tamagotchi.getHunger()), (tamagotchi.getHunger() / 100))
-                .addTextInputField("Durst", String.valueOf(tamagotchi.getThirst()), (tamagotchi.getThirst() / 100))
-                .addTextInputField("Energie", String.valueOf(tamagotchi.getEnergie()), (tamagotchi.getEnergie() / 100))
-                .addTextInputField("Gesundheit", String.valueOf(tamagotchi.getHealthynesse()), (tamagotchi.getHealthynesse() / 100))
-                .addTextInputField("Särke", String.valueOf(tamagotchi.getStrength()), (tamagotchi.getStrength() / 100))
-                .addTextInputField("Ausdauer", String.valueOf(tamagotchi.getEndurance()), (tamagotchi.getEndurance() / 100))
+                /*   .addTextInputField("Laune", String.valueOf(tamagotchi.getMood()), (tamagotchi.getMood() / 100))
+                   .addTextInputField("Hunger", String.valueOf(tamagotchi.getHunger()), (tamagotchi.getHunger() / 100))
+                   .addTextInputField("Durst", String.valueOf(tamagotchi.getThirst()), (tamagotchi.getThirst() / 100))
+                   .addTextInputField("Energie", String.valueOf(tamagotchi.getEnergie()), (tamagotchi.getEnergie() / 100))
+                   .addTextInputField("Gesundheit", String.valueOf(tamagotchi.getHealthynesse()), (tamagotchi.getHealthynesse() / 100))
+                   .addTextInputField("Särke", String.valueOf(tamagotchi.getStrength()), (tamagotchi.getStrength() / 100))
+                   .addTextInputField("Ausdauer", String.valueOf(tamagotchi.getEndurance()), (tamagotchi.getEndurance() / 100))*/
+                .addProgressBar("Laune", tamagotchi.moodPorperty())
+                .addProgressBar("Sättigung", tamagotchi.hungerPorperty())
+                .addProgressBar("Sitt", tamagotchi.thirstPorperty())
+                .addProgressBar("Energie", tamagotchi.energiePorperty())
+                .addProgressBar("Gesundheit", tamagotchi.healthynessProperty())
+                .addProgressBar("Särke", tamagotchi.strengthProperty())
+                .addProgressBar("Ausdauer", tamagotchi.enduranceProperty())
                 .addProgressBar("Fett", tamagotchi.fatProperty());
         GridPane statusPane = formbuilder.build();
 
-        Slider slider = new Slider();
 
-        slider.setMin(0);
-        slider.setMax(1);
-        slider.valueProperty().bindBidirectional(tamagotchi.fatProperty());
 
      /*    tamagotchi.einschlafen();
 
@@ -294,44 +246,35 @@ public class App {
             value.getValue().booleanValue();
         });*/
 
-        statusPane.add(slider,5,5);
 
         statusPane.setGridLinesVisible(true);
-
+        this.mainLayout.setTop(defaultHboxOben());
         this.mainLayout.setCenter(statusPane);
+        this.mainLayout.setBottom(defaultHboxUnten());
 
     }
 
     public void sportScreen() {
 
         //HBOX OBEN
-        HBox hBoxOben = creatingHBox();
+        HBox hBoxOben = UiUtils.creatingHBox();
         GridPane gridHbox = new GridPane();
-
-
-        for (int i = 0; i < 4; i++) {
-            ColumnConstraints col = new ColumnConstraints();
-            col.setPrefWidth(400);
-            col.setHalignment(HPos.CENTER);
-            col.setMinWidth(20);
-            gridHbox.getColumnConstraints().add(col);
-        }
-
+        UiUtils.creatingColumnsForHbox(4, gridHbox);
 
         gridHbox.setGridLinesVisible(true);
 
 
-        Button essen = utils.creatingButton("Essen");
+        Button essen = UiUtils.creatingButton("Essen");
         essen.setOnAction(e -> foodScreen());
 
-        Button spielen = utils.creatingButton("Spielen");
+        Button spielen = UiUtils.creatingButton("Spielen");
         spielen.setOnAction(event -> gameScreen());
 
-        Button sport = utils.creatingButton("Sport");
+        Button sport = UiUtils.creatingButton("Sport");
         sport.setStyle("-fx-background-color: #ffffff");
         sport.setOnAction(ev -> mainScreen());
 
-        Button schlafen = utils.creatingButton("Schlafen");
+        Button schlafen = UiUtils.creatingButton("Schlafen");
         schlafen.setOnAction(event -> sleepingScreen());
 
         gridHbox.add(essen, 0, 0, 1, 1);
@@ -356,39 +299,32 @@ public class App {
 
         this.mainLayout.setTop(hBoxOben);
         this.mainLayout.setCenter(sportsPane);
+        this.mainLayout.setBottom(defaultHboxUnten());
     }
 
     public void gameScreen() {
 
+
         //HBOX OBEN
-        HBox hBoxOben = creatingHBox();
+        HBox hBoxOben = UiUtils.creatingHBox();
         GridPane gridHbox = new GridPane();
-
-
-        for (int i = 0; i < 4; i++) {
-            ColumnConstraints col = new ColumnConstraints();
-            col.setPrefWidth(400);
-            col.setHalignment(HPos.CENTER);
-            col.setMinWidth(20);
-            gridHbox.getColumnConstraints().add(col);
-        }
-
+        UiUtils.creatingColumnsForHbox(4, gridHbox);
 
         gridHbox.setGridLinesVisible(true);
 
 
-        Button essen = utils.creatingButton("Essen");
+        Button essen = UiUtils.creatingButton("Essen");
         essen.setOnAction(e -> foodScreen());
 
-        Button spielen = utils.creatingButton("Spielen");
+        Button spielen = UiUtils.creatingButton("Spielen");
         spielen.setStyle("-fx-background-color: #ffffff");
         spielen.setOnAction(event -> mainScreen());
 
-        Button sport = utils.creatingButton("Sport");
+        Button sport = UiUtils.creatingButton("Sport");
 
         sport.setOnAction(ev -> sportScreen());
 
-        Button schlafen = utils.creatingButton("Schlafen");
+        Button schlafen = UiUtils.creatingButton("Schlafen");
         schlafen.setOnAction(event -> sleepingScreen());
 
         gridHbox.add(essen, 0, 0, 1, 1);
@@ -413,38 +349,30 @@ public class App {
 
         this.mainLayout.setTop(hBoxOben);
         this.mainLayout.setCenter(gamePane);
+        this.mainLayout.setBottom(defaultHboxUnten());
     }
 
     public void sleepingScreen() {
 
         //HBOX OBEN
-        HBox hBoxOben = creatingHBox();
+        HBox hBoxOben = UiUtils.creatingHBox();
         GridPane gridHbox = new GridPane();
-
-
-        for (int i = 0; i < 4; i++) {
-            ColumnConstraints col = new ColumnConstraints();
-            col.setPrefWidth(400);
-            col.setHalignment(HPos.CENTER);
-            col.setMinWidth(20);
-            gridHbox.getColumnConstraints().add(col);
-        }
-
+        UiUtils.creatingColumnsForHbox(4, gridHbox);
 
         gridHbox.setGridLinesVisible(true);
 
 
-        Button essen = utils.creatingButton("Essen");
+        Button essen = UiUtils.creatingButton("Essen");
         essen.setOnAction(e -> foodScreen());
 
-        Button spielen = utils.creatingButton("Spielen");
+        Button spielen = UiUtils.creatingButton("Spielen");
         spielen.setOnAction(event -> gameScreen());
 
-        Button sport = utils.creatingButton("Sport");
+        Button sport = UiUtils.creatingButton("Sport");
 
         sport.setOnAction(ev -> sportScreen());
 
-        Button schlafen = utils.creatingButton("Schlafen");
+        Button schlafen = UiUtils.creatingButton("Schlafen");
         schlafen.setStyle("-fx-background-color: #ffffff");
         schlafen.setOnAction(event -> mainScreen());
 
@@ -460,7 +388,7 @@ public class App {
         int maxNumberRows = 7;
         Formbuilder formbuilder = new Formbuilder(maxNumberColumn, maxNumberRows);
         formbuilder = formbuilder
-                .addHeader("Game")
+                .addHeader("Schlafen")
                 .addEmptyRow();
 
         for (Game game : speicher.getAllGame().values()) {
@@ -471,10 +399,13 @@ public class App {
 
         this.mainLayout.setTop(hBoxOben);
         this.mainLayout.setCenter(gamePane);
+        this.mainLayout.setBottom(defaultHboxUnten());
 
     }
 
     public void einstellungsScreen() {
 
+        this.mainLayout.setTop(defaultHboxOben());
+        /*this.mainLayout.setCenter(gamePane);*/
     }
 }

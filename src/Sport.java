@@ -1,21 +1,21 @@
 public class Sport {
     private String descriptionSport;
-    private int fatValueSport;
-    private int healthynessValueSport;
-    private int moodLevelSport;
+    private double fatValueSport;
+    private double healthynessValueSport;
+    private double moodLevelSport;
     private double strenghtValueSport;
     private double enduranceLevelSport;
-    private int hungerValueSport;
-    private int thirstValueSport;
-    private int energyValueSport;
-    private int hygieneValueSport;
+    private double hungerValueSport;
+    private double thirstValueSport;
+    private double energyValueSport;
+    private double hygieneValueSport;
 
 
-    public Sport(String descriptionSport, int fatValueSport,
-                 int healthynessValueSport, int moodLevelSport,
+    public Sport(String descriptionSport, double fatValueSport,
+                 double healthynessValueSport, double moodLevelSport,
                  double strenghtValueSport, double enduranceLevelSport,
-                 int hungerValueSport, int thirstValueSport,
-                 int energyValueSport, int hygieneValueSport
+                 double hungerValueSport, double thirstValueSport,
+                 double energyValueSport, double hygieneValueSport
     ) {
 
         this.descriptionSport = descriptionSport;
@@ -35,15 +35,15 @@ public class Sport {
         return descriptionSport;
     }
 
-    public int getFatValueSport() {
+    public double getFatValueSport() {
         return fatValueSport;
     }
 
-    public int getHealthynessValueSport() {
+    public double getHealthynessValueSport() {
         return healthynessValueSport;
     }
 
-    public int getMoodLevelSport() {
+    public double getMoodLevelSport() {
         return moodLevelSport;
     }
 
@@ -55,19 +55,19 @@ public class Sport {
         return enduranceLevelSport;
     }
 
-    public int getHungerValueSport() {
+    public double getHungerValueSport() {
         return hungerValueSport;
     }
 
-    public int getThirstValueSport() {
+    public double getThirstValueSport() {
         return thirstValueSport;
     }
 
-    public int getEnergyValueSport() {
+    public double getEnergyValueSport() {
         return energyValueSport;
     }
 
-    public int getHygieneValueSport() {
+    public double getHygieneValueSport() {
         return hygieneValueSport;
     }
 

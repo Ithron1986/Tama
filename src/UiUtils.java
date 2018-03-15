@@ -1,7 +1,9 @@
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -10,9 +12,9 @@ import javafx.stage.Popup;
 
 
 public class UiUtils {
-    private static int maxNumberCR = 100;
-    App app;
-    Farbe farbe = Farbe.Blau;
+    private static final int maxNumberCR = 100;
+
+    static final Farbe farbe = Farbe.Blau;
 
 
     public static GridPane creatingGrid(int maxNumberColumn, int maxNumberRows) {
@@ -34,7 +36,7 @@ public class UiUtils {
     }
 
     public static Button creatingButton(String title) {
-       return creatingButton(title,Farbe.Blau);
+        return creatingButton(title, Farbe.Blau);
     }
 
     public static Button creatingButton(String title, Farbe farbe) {
@@ -59,5 +61,25 @@ public class UiUtils {
         //pop nicht auf weil es in keine Scene eingebettet ist
 
     }
+
+    public static void creatingColumnsForHbox(int spaltenzahl, GridPane gridHbox){
+
+        for (int i = 0; i < spaltenzahl; i++) {
+            ColumnConstraints col = new ColumnConstraints();
+            col.setPrefWidth(800);
+            col.setMaxWidth(800);
+            col.setHalignment(HPos.CENTER);
+            col.setMinWidth(20);
+            gridHbox.getColumnConstraints().add(col);
+        }
+
+    }
+    public static HBox creatingHBox() {
+        HBox hBox = new HBox();
+        hBox.setStyle(farbe.farbe());
+        return hBox;
+    }
+
+
 
 }

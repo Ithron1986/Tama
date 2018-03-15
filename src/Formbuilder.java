@@ -1,4 +1,5 @@
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.HorizontalDirection;
@@ -70,9 +71,10 @@ public class Formbuilder {
     }
 
     public Formbuilder addProgressBar(String name, DoubleProperty statuswert) {
+
         Label label = new Label(name);
         ProgressBar progressBar = new ProgressBar(0);
-        progressBar.progressProperty().bind(statuswert);
+        progressBar.progressProperty().bind(statuswert.multiply(0.01));
         Label label2 = new Label();
         StringConverter<Number> converter = new NumberStringConverter();
         Bindings.bindBidirectional(label2.textProperty(),statuswert,converter);

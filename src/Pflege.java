@@ -34,40 +34,40 @@ public class Pflege {
     }
 
 
-    public int getNutrientsValue() {
+    public double getNutrientsValue() {
         return nutrientsValue;
     }
 
-    public int getHygieneValue() {
+    public double getHygieneValue() {
         return hygieneValue;
     }
 
-    public int getHealthynessValue() {
+    public double getHealthynessValue() {
         return healthynessValue;
     }
 
 
-    public int getMoodLevel() {
+    public double getMoodLevel() {
         return moodLevel;
     }
 
-    public int getHungerValue() {
+    public double getHungerValue() {
         return hungerValue;
     }
 
-    public int getThirstValue() {
+    public double getThirstValue() {
         return thirstValue;
     }
 
-    public int getEnergyValue() {
+    public double getEnergyValue() {
         return energyValue;
     }
 
-    public int getHarndrangValue() {
+    public double getHarndrangValue() {
         return harndrangValue;
     }
 
-    public int getToiletValue() {
+    public double getToiletValue() {
         return toiletValue;
     }
 

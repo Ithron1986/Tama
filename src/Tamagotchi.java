@@ -1,6 +1,4 @@
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
 public class Tamagotchi {
     private DoubleProperty fat = new SimpleDoubleProperty(0);
@@ -248,31 +246,43 @@ public class Tamagotchi {
     }
 
 
+    private void multiplyValue(double value, DoubleProperty property) {
+        property.set(
+                limit(
+                        property.get() * value,
+                        100,
+                        0
+                )
+        );
+    }
+
+    private void addToValue(double value, DoubleProperty property) {
+        double newValue = limit(property.get() + value, 100, 0);
+        property.set(newValue);
+    }
+
+
     public boolean essen(Food food) {
         if (!awake.get()) {
             return false;
         }
 
-        fat.add(food.getFatValue());
-        limit(fat.get(), 1000, 0);
-        nutrients.add(food.getNutrientsValue());
+        this.addToValue(food.getFatValue(), fat);
+        this.addToValue(food.getNutrientsValue(), nutrients);
         if (food.isVegetarian() == true) {
             this.vegetarian++;
             this.vegicounter++;
         } else {
             this.vegicounter++;
         }
-        energie.add(food.getEnergyValue());
-        limit(energie.get(), 100, 0);
-        healthynesse.add(food.getHealthynessValue());
-        limit(healthynesse.get(), 100, 0);
-        mood.add(food.getMoodLevel());
-        limit(mood.get(), 100, 0);
+
+        this.addToValue(food.getEnergyValue(), energie);
+        this.addToValue(food.getHealthynessValue(), healthynesse);
+        this.addToValue(food.getMoodLevel(), mood);
 
         //Hungerberechnung
-        double possibleResult = hunger.get() + food.getHungerValue();
-        if (possibleResult > maxSatiation) {
-            hunger.set(maxSatiation);
+        this.addToValue(food.getHungerValue(), hunger);
+        if (hunger.get() == maxSatiation) {
             ichPlatzegleich++;
             if (ichPlatzegleich == 1) {
                 ichBinVoll();
@@ -284,13 +294,11 @@ public class Tamagotchi {
                 setDoomCounter(getDoomcounter() + 1);
             }
         } else {
-            hunger.add(food.getHungerValue());
             ichPlatzegleich = 0;
         }
         //Durstberechnung
-        possibleResult = thirst.get() + food.getThirstValue();
-        if (possibleResult > maxThirst) {
-            thirst.set(maxThirst);
+        this.addToValue(food.getThirstValue(), thirst);
+        if (thirst.get() == maxThirst) {
             ichPlatzegleichDrink++;
             if (ichPlatzegleichDrink == 1) {
                 ichBinVoll();
@@ -302,7 +310,6 @@ public class Tamagotchi {
                 setDoomCounter(getDoomcounter() + 1);
             }
         } else {
-            thirst.add(food.getThirstValue());
             ichPlatzegleichDrink = 0;
         }
         return true;
@@ -315,21 +322,22 @@ public class Tamagotchi {
         fat.add(sport.getFatValueSport());
 
         if (fat.get() < 5) {
-            healthynesse.add(sport.getHealthynessValueSport());
-            mood.add(1 / 2 * (sport.getMoodLevelSport()));
-            strength.add(1 / 2 * (sport.getStrenghtValueSport()));
-            endurance.add(1 / 2 * (sport.getEnduranceLevelSport()));
-            hunger.add(2 * (sport.getHungerValueSport()));
-            thirst.add(sport.getThirstValueSport());
-            energie.add(2 * (sport.getEnergyValueSport()));
+            this.addToValue(sport.getHealthynessValueSport(), healthynesse);
+            this.addToValue(0.5 * sport.getMoodLevelSport(), mood);
+            this.addToValue(0.5 * sport.getStrenghtValueSport(), strength);
+            this.addToValue(0.5 * sport.getEnduranceLevelSport(), endurance);
+            this.addToValue(2 * sport.getHungerValueSport(), hunger);
+            this.addToValue(sport.getThirstValueSport(), thirst);
+            this.addToValue(2 * sport.getEnergyValueSport(), energie);
+
         } else {
-            healthynesse.add(sport.getHealthynessValueSport());
-            mood.add(sport.getMoodLevelSport());
-            strength.add(sport.getStrenghtValueSport());
-            endurance.add(sport.getEnduranceLevelSport());
-            hunger.add(sport.getHungerValueSport());
-            thirst.add(sport.getThirstValueSport());
-            energie.add(sport.getEnergyValueSport());
+            this.addToValue(sport.getHealthynessValueSport(), healthynesse);
+            this.addToValue(sport.getMoodLevelSport(), mood);
+            this.addToValue(sport.getStrenghtValueSport(), strength);
+            this.addToValue(sport.getEnduranceLevelSport(), endurance);
+            this.addToValue(sport.getHungerValueSport(), hunger);
+            this.addToValue(sport.getThirstValueSport(), thirst);
+            this.addToValue(sport.getEnergyValueSport(), energie);
         }
         return true;
     }
@@ -339,13 +347,13 @@ public class Tamagotchi {
             return false;
         }
         fat.add(game.getFatValueGame());
-        healthynesse.add(game.getHealthynessValueGame());
-        mood.add(game.getMoodLevelGame());
-        strength.add(game.getStrenghtValueGame());
-        endurance.add(game.getEnduranceLevelGame());
-        hunger.add(game.getHungerValueGame());
-        thirst.add(game.getThirstValueGame());
-        energie.add(game.getEnergyValueGame());
+        this.addToValue(game.getHealthynessValueGame(), healthynesse);
+        this.addToValue(game.getMoodLevelGame(), mood);
+        this.addToValue(game.getStrenghtValueGame(), strength);
+        this.addToValue(game.getEnduranceLevelGame(), endurance);
+        this.addToValue(game.getHungerValueGame(), hunger);
+        this.addToValue(game.getThirstValueGame(), thirst);
+        this.addToValue(game.getEnergyValueGame(), energie);
         return true;
     }
 
@@ -357,26 +365,26 @@ public class Tamagotchi {
             if (pflegecounter > 3) {
                 return false;
             } else {
-                nutrients.add(pflege.getNutrientsValue());
-                healthynesse.add(pflege.getHealthynessValue());
-                hygiene.add(pflege.getHygieneValue());
-                mood.add(pflege.getMoodLevel());
-                hunger.add(pflege.getHungerValue());
-                thirst.add(pflege.getThirstValue());
-                energie.add(pflege.getEnergyValue());
+                this.addToValue(pflege.getNutrientsValue(), nutrients);
+                this.addToValue(pflege.getHealthynessValue(), healthynesse);
+                this.addToValue(pflege.getHygieneValue(), hygiene);
+                this.addToValue(pflege.getMoodLevel(), mood);
+                this.addToValue(pflege.getHungerValue(), hunger);
+                this.addToValue(pflege.getThirstValue(), thirst);
+                this.addToValue(pflege.getEnergyValue(), energie);
                 pflegecounter++;
                 return true;
 
             }
         }
 
-        nutrients.add(pflege.getNutrientsValue());
-        healthynesse.add(pflege.getHealthynessValue());
-        hygiene.add(pflege.getHygieneValue());
-        mood.add(pflege.getMoodLevel());
-        hunger.add(pflege.getHungerValue());
-        thirst.add(pflege.getThirstValue());
-        energie.add(pflege.getEnergyValue());
+        this.addToValue(pflege.getNutrientsValue(), nutrients);
+        this.addToValue(pflege.getHealthynessValue(), healthynesse);
+        this.addToValue(pflege.getHygieneValue(), hygiene);
+        this.addToValue(pflege.getMoodLevel(), mood);
+        this.addToValue(pflege.getHungerValue(), hunger);
+        this.addToValue(pflege.getThirstValue(), thirst);
+        this.addToValue(pflege.getEnergyValue(), energie);
         return true;
     }
 
@@ -452,137 +460,77 @@ public class Tamagotchi {
         return awake.get();
     }
 
-    /*public void isAwake() {
+
+    public void changeStatus() {
         if (awake.get()) {
-            Thread t = new Thread(() -> {
-                while (awake.get()) {
-                    try {
-                        Thread.sleep(600000);
-                        this.fatigue = fatigue - 0.8;
-                        this.energie = energie - 0.92;
-                        this.hunger = hunger - 3;
-                        this.thirst = thirst - 4;
-                        this.hygiene = hygiene - 1;
-                        this.toilet = toilet + 1;
-                        this.harndrang = harndrang + 2;
-                        this.sleepCounter = sleepCounter - 2.5;
-                        //pflegecounter wird hier reduziert um eine Nutzung von Duschen etc wieder zu ermöglichen
-                        if (pflegecounter >= 1) {
-                            pflegecounter--;
-                        }
-
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            t.start();
+            this.changeStatusvalueAwake();
+        } else {
+            this.changeStatusValueAsleep();
         }
-
-    }*/
-
-/*
-
-    public void schlafen() {
-        awake = false;
-        if (awake == false) {
-            Thread t = new Thread(() -> {
-                while (awake == false) {
-                    try {
-                        if (sleepCounter < 6) {
-                            Thread.sleep(600000);
-                            this.sleepCounter = sleepCounter++;
-                            this.fatigue = fatigue + 1;
-                            this.energie = energie + 4;
-                            this.hunger = hunger - 0.8;
-                            this.thirst = thirst - 0.9;
-                            this.hygiene = hygiene - 0.5;
-                            this.toilet = toilet + 0.8;
-                            this.harndrang = harndrang + 0.8;
-
-                            if (pflegecounter >= 1) {
-                                pflegecounter--;
-                            }
-                        } else {
-                            Thread.sleep(600000);
-                            this.sleepCounter = sleepCounter++;
-                            this.fatigue = fatigue + 2.2;
-                            this.energie = energie + 2.8;
-                            this.hunger = hunger - 0.8;
-                            this.thirst = thirst - 0.9;
-                            this.hygiene = hygiene - 0.5;
-                            this.toilet = toilet + 0.8;
-                            this.harndrang = harndrang + 0.8;
-
-                            if (pflegecounter >= 1) {
-                                pflegecounter--;
-                            }
-
-                            if (sleepCounter >= 60) {
-                                awake = true;
-                            } else {
-                                awake = false;
-                            }
-                        }
-
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            t.start();
-        }
-
     }
 
-    public void nickerchen() {
-        awake = false;
-        awake = false;
-        if (awake == false) {
-            Thread t = new Thread(() -> {
-                while (awake == false) {
-                    try {
+    private void changeStatusValueAsleep() {
 
-                        Thread.sleep(600000);
-                        this.sleepCounter = sleepCounter++;
-                        this.fatigue = fatigue + 1;
-                        this.energie = energie + 4;
-                        this.hunger = hunger - 1;
-                        this.thirst = thirst - 4;
-                        this.hygiene = hygiene - 1;
-                        this.toilet = toilet + 1;
-                        this.harndrang = harndrang + 2;
-
-                        if (pflegecounter >= 1) {
-                            pflegecounter--;
-                        }
-
-                        if (sleepCounter >= 6) {
-                            awake = true;
-                        } else {
-                            awake = false;
-                        }
+        if (sleepCounter < 6) {
+            this.sleepCounter = sleepCounter++;
+            this.addToValue(1, fatigue);
+            this.addToValue(4, energie);
+            this.addToValue(-0.8, hunger);
+            this.addToValue(-0.9, thirst);
+            this.addToValue(-0.5, hygiene);
+            this.addToValue(0.8, toilet);
+            this.addToValue(0.8, harndrang);
 
 
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            t.start();
+            if (pflegecounter >= 1) {
+                pflegecounter--;
+            }
+        } else {
+            this.sleepCounter = sleepCounter++;
+            this.addToValue(+2.2, fatigue);
+            this.addToValue(+2.8, energie);
+            this.addToValue(-0.8, hunger);
+            this.addToValue(-0.9, thirst);
+            this.addToValue(-0.5, hygiene);
+            this.addToValue(0.8, toilet);
+            this.addToValue(0.8, harndrang);
+
+            if (pflegecounter >= 1) {
+                pflegecounter--;
+            }
+
+            if (sleepCounter >= 60) {
+                awake.set(true);
+            }
         }
-
     }
 
+    private void changeStatusvalueAwake() {
+
+        this.addToValue(-0.8, fatigue);
+        this.addToValue(-0.92, energie);
+        this.addToValue(-3, hunger);
+        this.addToValue(-4, thirst);
+        this.addToValue(-1, hygiene);
+        this.addToValue(+1, toilet);
+        this.addToValue(+2, harndrang);
+
+        this.sleepCounter = sleepCounter - 2.5;
+        //pflegecounter wird hier reduziert um eine Nutzung von Duschen etc wieder zu ermöglichen
+        if (pflegecounter >= 1) {
+            pflegecounter--;
+        }
+    }
+
+    ///Methode könnte fehler haben
     public boolean aufwecken() {
-        if (fatigue > 60 && sleepCounter < 36) {
-            this.mood = mood - 10;
+        if (fatigue.get() > 60 && sleepCounter < 36) {
+            this.mood.set(mood.get() - 10);
         }
-        return awake = true;
+        awake.set(true);
+        return awake.get();
     }
-*/
+
 
     public int getDoomcounter() {
         return this.doomCounter;
