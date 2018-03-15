@@ -506,7 +506,7 @@ public class Tamagotchi {
     }
 
     private void changeStatusvalueAwake() {
-
+        System.out.println("change status awake");
         this.addToValue(-0.8, fatigue);
         this.addToValue(-0.92, energie);
         this.addToValue(-3, hunger);
@@ -520,6 +520,8 @@ public class Tamagotchi {
         if (pflegecounter >= 1) {
             pflegecounter--;
         }
+        System.out.println("done change status awake");
+
     }
 
     ///Methode könnte fehler haben

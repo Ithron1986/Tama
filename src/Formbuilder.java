@@ -70,22 +70,60 @@ public class Formbuilder {
         return this;
     }
 
-    public Formbuilder addProgressBar(String name, DoubleProperty statuswert) {
+    private void setProgressBarColorByValue(ProgressBar progressBar) {
+        double progress = progressBar.getProgress();
+        progressBar.getStyleClass().removeAll(
+                "red-bar",
+                "orange-bar",
+                "yellow-bar",
+                "green-bar"
+        );
+        if (progress > 0.75){
+            progressBar.getStyleClass().add("red-bar");
+            return;
+        }
+        if (progress > 0.5) {
+            progressBar.getStyleClass().add("orange-bar");
+            return;
+        }
 
+        if (progress > 0.25) {
+            progressBar.getStyleClass().add("yellow-bar");
+            return;
+        }
+        progressBar.getStyleClass().add("green-bar");
+    }
+
+    public Formbuilder addProgressBar(String name, DoubleProperty statuswert) {
+        final int finalRowindex =3;
         Label label = new Label(name);
         ProgressBar progressBar = new ProgressBar(0);
         progressBar.progressProperty().bind(statuswert.multiply(0.01));
+
+        //setProgressBarColorByValue(progressBar);
+        //progressBar.progressProperty().addListener((property, old, newVal) -> {
+        //    setProgressBarColorByValue(progressBar);
+        //});
+
         Label label2 = new Label();
         StringConverter<Number> converter = new NumberStringConverter();
-        Bindings.bindBidirectional(label2.textProperty(),statuswert,converter);
-        this.result.add(label, currentColIndex, currentRowIndex);
-        this.result.add(label2, currentColIndex + 3, currentRowIndex);
-        this.result.add(progressBar, currentColIndex + 1, currentRowIndex, 2, 1);
-        currentRowIndex++;
+        Bindings.bindBidirectional(label2.textProperty(), statuswert, converter);
+        if (currentRowIndex <= maxNumberRows) {
+            this.result.add(label, currentColIndex, currentRowIndex);
+            this.result.add(label2, currentColIndex + 3, currentRowIndex);
+            this.result.add(progressBar, currentColIndex + 1, currentRowIndex, 1, 1);
+            currentRowIndex++;
+        } else {
+            currentColIndex += 4;
+            this.result.add(label, currentColIndex, currentRowIndex=finalRowindex);
+            this.result.add(label2, currentColIndex + 3, currentRowIndex);
+            this.result.add(progressBar, currentColIndex + 1, currentRowIndex, 1, 1);
+            currentRowIndex++;
+
+        }
+
         return this;
     }
-
-
 
 
     public Map<String, TextInputControl> getControls() {
@@ -100,7 +138,7 @@ public class Formbuilder {
     public Formbuilder addButton(EventHandler<ActionEvent> handler, String buttonLabel) {
         Button button = new Button(buttonLabel);
         button.setOnAction(handler);
-        button.setPrefSize(300,8);
+        button.setPrefSize(300, 8);
         final int finalRowIndex = 2;
         if (currentRowIndex <= maxNumberRows) {
             this.result.add(button, currentColIndex, currentRowIndex);

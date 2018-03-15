@@ -2,6 +2,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 public class App {
@@ -16,8 +17,10 @@ public class App {
     private Scene scene;
     private Stage stage;
 
+    int i = 1;
 
-    private App(Stage stage, Speicher speicher, Tamagotchi tamagotchi) {
+
+    public App(Stage stage, Speicher speicher, Tamagotchi tamagotchi) {
         this.speicher = speicher;
         this.tamagotchi = tamagotchi;
         this.mainLayout = new BorderPane();
@@ -33,14 +36,24 @@ public class App {
 
         TamagotchiService tamagotchiService = new TamagotchiService();
 
-        tamagotchiService.setOnSucceeded(e -> this.tamagotchi.changeStatus());
+        tamagotchiService.setOnFailed(e -> System.out.println("service failed"));
 
+        tamagotchiService.setOnSucceeded(e -> {
+            System.out.println(i++);
+            this.tamagotchi.changeStatus();
+        });
+
+
+
+        tamagotchiService.setDelay(Duration.seconds(2));
+        tamagotchiService.setPeriod(Duration.seconds(2));
         tamagotchiService.start();
 
 
         this.scene = new Scene(this.mainLayout, 1600, 900);
         this.stage.setScene(scene);
         this.stage.setTitle("Tamagotchi");
+        this.scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         mainScreen();
         this.stage.show();
 
@@ -145,8 +158,34 @@ public class App {
         }
 
         GridPane pflegePane = formbuilder.build();
+
+        //Hbox Unten
+        HBox hBoxUnten = UiUtils.creatingHBox();
+        GridPane gridHBoxUntenMain = new GridPane();
+        UiUtils.creatingColumnsForHbox(3, gridHBoxUntenMain);
+
+        gridHBoxUntenMain.setGridLinesVisible(true);
+
+        Button pflege = UiUtils.creatingButton("Pflege");
+        pflege.setStyle("-fx-background-color: #ffffff");
+        pflege.setOnAction(e -> mainScreen());
+
+        Button status = UiUtils.creatingButton("Status");
+        status.setOnAction(e -> statusScreen());
+
+        Button einstellungen = UiUtils.creatingButton("Einstellungen");
+        einstellungen.setOnAction(e -> einstellungsScreen());
+
+
+        gridHBoxUntenMain.add(pflege, 0, 0, 1, 1);
+        gridHBoxUntenMain.add(status, 1, 0, 1, 1);
+        gridHBoxUntenMain.add(einstellungen, 2, 0, 1, 1);
+        hBoxUnten.getChildren().addAll(gridHBoxUntenMain);
+
+
         this.mainLayout.setTop(defaultHboxOben());
         this.mainLayout.setCenter(pflegePane);
+        this.mainLayout.setBottom(hBoxUnten);
 
     }
 
@@ -217,17 +256,15 @@ public class App {
         formbuilder.addHeader("Status")
                 .addEmptyRow()
                 .addEmptyRow()
-                /*   .addTextInputField("Laune", String.valueOf(tamagotchi.getMood()), (tamagotchi.getMood() / 100))
-                   .addTextInputField("Hunger", String.valueOf(tamagotchi.getHunger()), (tamagotchi.getHunger() / 100))
-                   .addTextInputField("Durst", String.valueOf(tamagotchi.getThirst()), (tamagotchi.getThirst() / 100))
-                   .addTextInputField("Energie", String.valueOf(tamagotchi.getEnergie()), (tamagotchi.getEnergie() / 100))
-                   .addTextInputField("Gesundheit", String.valueOf(tamagotchi.getHealthynesse()), (tamagotchi.getHealthynesse() / 100))
-                   .addTextInputField("Särke", String.valueOf(tamagotchi.getStrength()), (tamagotchi.getStrength() / 100))
-                   .addTextInputField("Ausdauer", String.valueOf(tamagotchi.getEndurance()), (tamagotchi.getEndurance() / 100))*/
+
                 .addProgressBar("Laune", tamagotchi.moodPorperty())
                 .addProgressBar("Sättigung", tamagotchi.hungerPorperty())
                 .addProgressBar("Sitt", tamagotchi.thirstPorperty())
+                .addProgressBar("Ausgeschlafen", tamagotchi.fatigueProperty())
                 .addProgressBar("Energie", tamagotchi.energiePorperty())
+                .addProgressBar("Blasenentleerung", tamagotchi.harndrangProperty())
+                .addProgressBar("Darmentleerung", tamagotchi.toiletProperty())
+                .addProgressBar("Hygiene", tamagotchi.hygieneProperty())
                 .addProgressBar("Gesundheit", tamagotchi.healthynessProperty())
                 .addProgressBar("Särke", tamagotchi.strengthProperty())
                 .addProgressBar("Ausdauer", tamagotchi.enduranceProperty())
@@ -247,10 +284,33 @@ public class App {
         });*/
 
 
+        //Hbox Unten
+        HBox hBoxUnten = UiUtils.creatingHBox();
+        GridPane gridHBoxUntenMain = new GridPane();
+        UiUtils.creatingColumnsForHbox(3, gridHBoxUntenMain);
+
+        gridHBoxUntenMain.setGridLinesVisible(true);
+
+        Button pflege = UiUtils.creatingButton("Pflege");
+        pflege.setOnAction(e -> pflegeScreen());
+
+        Button status = UiUtils.creatingButton("Status");
+        status.setStyle("-fx-background-color: #ffffff");
+        status.setOnAction(e -> mainScreen());
+
+        Button einstellungen = UiUtils.creatingButton("Einstellungen");
+        einstellungen.setOnAction(e -> einstellungsScreen());
+
+
+        gridHBoxUntenMain.add(pflege, 0, 0, 1, 1);
+        gridHBoxUntenMain.add(status, 1, 0, 1, 1);
+        gridHBoxUntenMain.add(einstellungen, 2, 0, 1, 1);
+        hBoxUnten.getChildren().addAll(gridHBoxUntenMain);
+
         statusPane.setGridLinesVisible(true);
         this.mainLayout.setTop(defaultHboxOben());
         this.mainLayout.setCenter(statusPane);
-        this.mainLayout.setBottom(defaultHboxUnten());
+        this.mainLayout.setBottom(hBoxUnten);
 
     }
 
@@ -405,7 +465,34 @@ public class App {
 
     private void einstellungsScreen() {
 
+
+        //Hbox Unten
+        HBox hBoxUnten = UiUtils.creatingHBox();
+        GridPane gridHBoxUntenMain = new GridPane();
+        UiUtils.creatingColumnsForHbox(3, gridHBoxUntenMain);
+
+        gridHBoxUntenMain.setGridLinesVisible(true);
+
+        Button pflege = UiUtils.creatingButton("Pflege");
+        pflege.setOnAction(e -> pflegeScreen());
+
+        Button status = UiUtils.creatingButton("Status");
+        status.setOnAction(e -> statusScreen());
+
+        Button einstellungen = UiUtils.creatingButton("Einstellungen");
+        einstellungen.setStyle("-fx-background-color: #ffffff");
+        einstellungen.setOnAction(e -> mainScreen());
+
+
+        gridHBoxUntenMain.add(pflege, 0, 0, 1, 1);
+        gridHBoxUntenMain.add(status, 1, 0, 1, 1);
+        gridHBoxUntenMain.add(einstellungen, 2, 0, 1, 1);
+        hBoxUnten.getChildren().addAll(gridHBoxUntenMain);
+
+
         this.mainLayout.setTop(defaultHboxOben());
-        /*this.mainLayout.setCenter(gamePane);*/
+
+        this.mainLayout.setBottom(hBoxUnten);
+
     }
 }

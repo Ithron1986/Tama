@@ -11,9 +11,10 @@ public class TamagotchiService extends ScheduledService<Object> {
 
     private static class TamagotchiTask extends Task<Object> {
 
+
         @Override
         protected Object call() throws Exception {
-            Thread.sleep(5000);
+            System.out.println("service finished "+System.currentTimeMillis() / 1000L);
             return null;
         }
     }
